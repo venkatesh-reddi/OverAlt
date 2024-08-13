@@ -153,4 +153,4 @@ The `DataGenerator` class provides utility methods to generate random data for t
 4. **Logging Calls**: Call details are logged automatically, ensuring compliance with the plan’s rules.
 
 ## License
-This project is licensed under the MIT License.
+Licensed under the Apache License, Version 2.0.
