@@ -1,4 +1,4 @@
-package com.overalt.overalt;
+package com.overalt;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
