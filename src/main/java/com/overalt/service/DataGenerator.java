@@ -1,4 +1,4 @@
-package com.overalt.overalt.service;
+package com.overalt.service;
 
 public class DataGenerator {
 
