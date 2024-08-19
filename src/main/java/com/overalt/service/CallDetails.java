@@ -15,6 +15,10 @@ public class CallDetails {
     private boolean isAllowed;
     double callMinutes=3.00;
 
+    //empty constructor
+    CallDetails(){
+      
+    }
     // Constructor
     public CallDetails(int callId, int customerId, String calledNumber, LocalDateTime callStartTime, LocalDateTime callEndTime, String callType) {
         this.callId = callId;
