@@ -124,7 +124,7 @@ The `CallDetails` class manages the details of calls made by the customer.
 
 #### Methods:
 - `calculateCallDuration()`: Calculates the duration of the call.
--`getCallDetails()`:gets call details by callid or caller_id
+- `getCallDetails()`: gets call details by callid or caller_id
 
 ### DataGenerator Class
 The `DataGenerator` class provides utility methods to generate random data for testing.
