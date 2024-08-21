@@ -1,77 +1,96 @@
 package com.overalt.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import javax.validation.constraints.*;
 
 @Entity
-@Table(name = "Customers")
+@Table(name = "customers")
 public class Customer {
-	@Id
-    private int customer_id;
-    @Column(nullable = false)
-    private String first_name;
-    @Column(nullable = false)
-    private String last_name;
-    @Column(unique = true)
-    private String phone_number;
-    @Column(unique = true)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Assuming customer_id is auto-generated
+    private int customerId;
+
+    @Column(nullable = false, length = 50)
+    @NotNull
+    @Size(max = 50)
+    private String firstName;
+
+    @Column(nullable = false, length = 50)
+    @NotNull
+    @Size(max = 50)
+    private String lastName;
+
+    @Column(unique = true, nullable = false, length = 15)
+    @NotNull
+    @Size(max = 15)
+    private String phoneNumber;
+
+    @Column(unique = true, nullable = false, length = 100)
+    @NotNull
+    @Email
+    @Size(max = 100)
     private String email;
-    @Column(nullable = false)
+
+    @Column(nullable = false, length = 255)
+    @NotNull
     private String address;
-    @Column(nullable = false)
-    private int plan_id;
-    @Column(nullable = false)
-    private int current_family_count;
-    @Column(nullable = false)
-    private int current_friends_count;
 
-    public Customer() {
-    }
+    @Column(nullable = false)
+    private int planId;
 
-    public Customer(int customer_id, String first_name, String last_name, String phone_number, String email, String address, int plan_id, int current_family_count, int current_friends_count) {
-        this.customer_id = customer_id;
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.phone_number = phone_number;
+    @Column(nullable = false)
+    private int currentFamilyCount;
+
+    @Column(nullable = false)
+    private int currentFriendsCount;
+
+    // Default Constructor
+    public Customer() {}
+
+    // Constructor without customerId
+    public Customer(String firstName, String lastName, String phoneNumber, String email, String address, int planId, int currentFamilyCount, int currentFriendsCount) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
         this.email = email;
         this.address = address;
-        this.plan_id = plan_id;
-        this.current_family_count = current_family_count;
-        this.current_friends_count = current_friends_count;
+        this.planId = planId;
+        this.currentFamilyCount = currentFamilyCount;
+        this.currentFriendsCount = currentFriendsCount;
     }
 
-    public int getCustomer_id() {
-        return customer_id;
+    // Getters and Setters
+    public int getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomer_id(int customer_id) {
-        this.customer_id = customer_id;
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getPhone_number() {
-        return phone_number;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhone_number(String phone_number) {
-        this.phone_number = phone_number;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getEmail() {
@@ -90,42 +109,42 @@ public class Customer {
         this.address = address;
     }
 
-    public int getPlan_id() {
-        return plan_id;
+    public int getPlanId() {
+        return planId;
     }
 
-    public void setPlan_id(int plan_id) {
-        this.plan_id = plan_id;
+    public void setPlanId(int planId) {
+        this.planId = planId;
     }
 
-    public int getCurrent_family_count() {
-        return current_family_count;
+    public int getCurrentFamilyCount() {
+        return currentFamilyCount;
     }
 
-    public void setCurrent_family_count(int current_family_count) {
-        this.current_family_count = current_family_count;
+    public void setCurrentFamilyCount(int currentFamilyCount) {
+        this.currentFamilyCount = currentFamilyCount;
     }
 
-    public int getCurrent_friends_count() {
-        return current_friends_count;
+    public int getCurrentFriendsCount() {
+        return currentFriendsCount;
     }
 
-    public void setCurrent_friends_count(int current_friends_count) {
-        this.current_friends_count = current_friends_count;
+    public void setCurrentFriendsCount(int currentFriendsCount) {
+        this.currentFriendsCount = currentFriendsCount;
     }
 
     @Override
     public String toString() {
         return "Customer{" +
-                "customer_id=" + customer_id +
-                ", first_name='" + first_name + '\'' +
-                ", last_name='" + last_name + '\'' +
-                ", phone_number='" + phone_number + '\'' +
+                "customerId=" + customerId +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", address='" + address + '\'' +
-                ", plan_id=" + plan_id +
-                ", current_family_count=" + current_family_count +
-                ", current_friends_count=" + current_friends_count +
+                ", planId=" + planId +
+                ", currentFamilyCount=" + currentFamilyCount +
+                ", currentFriendsCount=" + currentFriendsCount +
                 '}';
     }
 }

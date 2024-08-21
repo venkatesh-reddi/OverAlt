@@ -1,34 +1,32 @@
 package com.overalt.model;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "call_details")
 public class CallDetails {
 
     @Id
-    
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer callId;
 
-    @Column(name = "caller_id")
+    @Column(name = "caller_id", nullable = false)
     private Long callerId;
 
-    @Column(name = "receiver_id")
-    private String receiverId;
+    @Column(name = "receiver_id", nullable = false)
+    private Long receiverId;
 
-    @Column(name = "call_start_time")
+    @Column(name = "call_start_time", nullable = false)
     private LocalDateTime callStartTime;
 
-    @Column(name = "call_end_time")
+    @Column(name = "call_end_time", nullable = false)
     private LocalDateTime callEndTime;
 
-    @Column(name = "call_duration")
-    private Long callDuration;
+    @Column(name = "call_duration", nullable = false)
+    private Long callDuration; // In minutes
 
     // Getters and Setters
 
@@ -48,11 +46,11 @@ public class CallDetails {
         this.callerId = callerId;
     }
 
-    public String getReceiverId() {
+    public Long getReceiverId() {
         return receiverId;
     }
 
-    public void setReceiverId(String receiverId) {
+    public void setReceiverId(Long receiverId) {
         this.receiverId = receiverId;
     }
 
@@ -80,13 +78,10 @@ public class CallDetails {
         this.callDuration = callDuration;
     }
 
-    // Methods to calculate duration
+    // Method to calculate call duration
     public void calculateCallDuration() {
         if (callStartTime != null && callEndTime != null) {
-            this.callDuration = java.time.Duration.between(callStartTime, callEndTime).toMinutes();
+            this.callDuration = Duration.between(callStartTime, callEndTime).toMinutes();
         }
-
-       
     }
-    }
-
+}

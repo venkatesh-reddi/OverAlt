@@ -1,30 +1,32 @@
 package com.overalt.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "FriendOrFamily")
-public class FriendOrFamily{
+@Table(name = "friend_or_family")
+public class FriendOrFamily {
+
     @Id
+    @Column(unique = true)
     private long contactNumber;
-    @Column(nullable = false)
+
+    @Column(nullable = false, length = 50)
     private String contactName;
-    @Column(nullable = false)
+
+    @Column(nullable = false, length = 20)
     private String relationshipType;
 
-    public FriendOrFamily(){
+    // Default Constructor
+    public FriendOrFamily() {}
 
-    }
-
-    public FriendOrFamily( long contactNumber, String contactName, String relationshipType){
+    // Parameterized Constructor
+    public FriendOrFamily(long contactNumber, String contactName, String relationshipType) {
         this.contactNumber = contactNumber;
         this.contactName = contactName;
         this.relationshipType = relationshipType;
     }
 
+    // Getters and Setters
     public long getContactNumber() {
         return contactNumber;
     }
@@ -41,18 +43,20 @@ public class FriendOrFamily{
         this.contactName = contactName;
     }
 
-    public String getRelationType() {
+    public String getRelationshipType() {
         return relationshipType;
     }
 
-    public void setRelationType(String relationshipType) {
+    public void setRelationshipType(String relationshipType) {
         this.relationshipType = relationshipType;
     }
+
     @Override
     public String toString() {
-        return  "FriendOrFamily{" +
-        "Contact Number=" + contactNumber +
-        ", Contact Name='" + contactName + '\'' +
-        ", Relationship Type ='" + relationshipType + '\'' ;
+        return "FriendOrFamily{" +
+                "contactNumber=" + contactNumber +
+                ", contactName='" + contactName + '\'' +
+                ", relationshipType='" + relationshipType + '\'' +
+                '}';
     }
 }
