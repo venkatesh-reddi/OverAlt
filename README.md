@@ -54,12 +54,11 @@ The application uses the following database tables:
 
 ### CallDetails Table
 - `call_id` (Primary Key)
-- `customer_id` (Foreign Key referencing Customers table)
-- `callerName`
-- `recieverName`
+- `caller_id` (Foreign Key referencing Customers table)
+- `reciever_id`
+- `call_start_time`
 - `call_end_time`
 - `call_duration`
-- `balance minutes`
 
 ## Java Classes and Methods
 
@@ -117,16 +116,15 @@ The `CallDetails` class manages the details of calls made by the customer.
 
 #### Attributes:
 - `call_id` (Primary Key)
-- `customer_id` (Foreign Key referencing Customers table)
-- `callerName`
-- `recieverName`
+- `caller_id` (Foreign Key referencing Customers table)
+- `reciever_id`
+- `call_start_time`
 - `call_end_time`
 - `call_duration`
-- `balance minutes`
 
 #### Methods:
 - `calculateCallDuration()`: Calculates the duration of the call.
-- `checkBalanceMinutes()`: Calculates if the call is exceeding duration based on plan
+- `getCallDetails()`: gets call details by callid or caller_id
 
 ### DataGenerator Class
 The `DataGenerator` class provides utility methods to generate random data for testing.
