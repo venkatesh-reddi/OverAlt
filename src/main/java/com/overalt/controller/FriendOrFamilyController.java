@@ -1,20 +1,25 @@
 package com.overalt.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.overalt.service.CustomerService;
-
-
+import com.overalt.service.FriendOrFamilyService;
 
 @RestController
 public class FriendOrFamilyController {
-    @GetMapping("/updateContactNumber")
-    public String getMethodName(@RequestParam String newPhoneNumber) {
-       CustomerService FriendOrFamilyService = new CustomerService(null);
-        return FriendOrFamilyService.getCustomerByEmail(newPhoneNumber).toString();
+
+    @Autowired
+    private final FriendOrFamilyService friendOrFamilyService;
+
+    public FriendOrFamilyController(FriendOrFamilyService friendOrFamilyService) {
+        this.friendOrFamilyService = friendOrFamilyService;
     }
 
-    
+    @PostMapping("/updateContactNumber")
+    public String updateContactNumber(@RequestParam long oldContactNumber, @RequestParam long newContactNumber) {
+        boolean updated = friendOrFamilyService.updateContactNumber(oldContactNumber, newContactNumber);
+        return updated ? "Contact number updated successfully" : "Failed to update contact number";
+    }
 }
