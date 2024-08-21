@@ -1,13 +1,15 @@
 package com.overalt.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
+import com.overalt.model.Plan;
 import com.overalt.repository.PlanRepository;
 
 public class PlanService {
 
-@Autowired
-private PlanRepository planRepository;
+private final PlanRepository planRepository;
+
+    public PlanService(PlanRepository planRepository) {
+        this.planRepository = planRepository;
+    }
 
 public Plan getPlanById(int plan_id) {
         return planRepository.findByPlan_id(plan_id);
