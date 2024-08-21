@@ -1,12 +1,15 @@
 package com.overalt.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.overalt.model.Customer;
 import com.overalt.repository.CustomerRepository;
 
+@Service
 public class CustomerService {
 
     @Autowired
@@ -16,19 +19,19 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
-    public Customer getCustomerByEmail(String email) {
+    public Optional<Customer> getCustomerByEmail(String email) {
         return customerRepository.findByEmail(email);
     }
 
-    public Customer getCustomerByPhoneNumber(String phoneNumber) {
+    public Optional<Customer> getCustomerByPhoneNumber(String phoneNumber) {
         return customerRepository.findByPhoneNumber(phoneNumber);
     }
 
-    public Customer getCustomerById(int customer_id) {
-        return customerRepository.findByCustomer_id(customer_id);
+    public Optional<Customer> getCustomerById(int customerId) {
+        return customerRepository.findByCustomer_id(customerId);
     }
 
-    public List<Customer> getCustomersByPlanId(int plan_id) {
-        return customerRepository.findByPlan_id(plan_id);
+    public List<Customer> getCustomersByPlanId(int planId) {
+        return customerRepository.findByPlan_id(planId);
     }
 }

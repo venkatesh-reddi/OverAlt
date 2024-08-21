@@ -1,26 +1,28 @@
 package com.overalt.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.overalt.model.FriendOrFamily;
 import com.overalt.repository.FriendOrFamilyRepository;
 
-public class FriendOrFamilyService{
+@Service
+public class FriendOrFamilyService {
+
+    private final FriendOrFamilyRepository friendOrFamilyRepository;
+
     @Autowired
-    public final FriendOrFamilyRepository ffrepo;
-
-    public FriendOrFamilyService(FriendOrFamilyRepository ffrepo){
-        this.ffrepo = ffrepo;
+    public FriendOrFamilyService(FriendOrFamilyRepository friendOrFamilyRepository) {
+        this.friendOrFamilyRepository = friendOrFamilyRepository;
     }
 
-    // Method to update the contact number
-    public FriendOrFamily updateContactNumber(String newPhoneNumber) {
-        return ffrepo.updateContactNumber(newPhoneNumber);
+    public boolean updateContactNumber(long oldContactNumber, long newContactNumber) {
+        FriendOrFamily friendOrFamily = friendOrFamilyRepository.findByContactNumber(oldContactNumber);
+        if (friendOrFamily != null) {
+            friendOrFamily.setContactNumber(newContactNumber);
+            friendOrFamilyRepository.save(friendOrFamily);
+            return true;
+        }
+        return false;
     }
-
-    // Method to update the relationship type
-    public FriendOrFamily updateRelationshipType(String newRelationshipType) {
-        return ffrepo.updateRelationshipType(newRelationshipType);
-    }
-
 }
