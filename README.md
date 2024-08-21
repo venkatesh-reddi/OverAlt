@@ -54,13 +54,11 @@ The application uses the following database tables:
 
 ### CallDetails Table
 - `call_id` (Primary Key)
-- `customer_id` (Foreign Key referencing Customers table)
-- `called_number`
+- `caller_id` (Foreign Key referencing Customers table)
+- `reciever_id`
 - `call_start_time`
 - `call_end_time`
 - `call_duration`
-- `call_type` (e.g., Local, International)
-- `is_allowed` (Boolean flag indicating whether the call is allowed based on the plan)
 
 ## Java Classes and Methods
 
@@ -117,19 +115,16 @@ The `FriendOrFamily` class represents a contact in the customer's friends and fa
 The `CallDetails` class manages the details of calls made by the customer.
 
 #### Attributes:
-- `callId`
-- `customerId`
-- `calledNumber`
-- `callStartTime`
-- `callEndTime`
-- `callDuration`
-- `callType`
-- `isAllowed`
+- `call_id` (Primary Key)
+- `caller_id` (Foreign Key referencing Customers table)
+- `reciever_id`
+- `call_start_time`
+- `call_end_time`
+- `call_duration`
 
 #### Methods:
 - `calculateCallDuration()`: Calculates the duration of the call.
-- `logCallDetails()`: Logs the call details in the database.
-- `setIsAllowed(boolean isAllowed)`: Sets whether the call is allowed based on the plan.
+- `getCallDetails()`: gets call details by callid or caller_id
 
 ### DataGenerator Class
 The `DataGenerator` class provides utility methods to generate random data for testing.
