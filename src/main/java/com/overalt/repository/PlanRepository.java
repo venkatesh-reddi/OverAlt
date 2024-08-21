@@ -1,13 +1,14 @@
 package com.overalt.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import com.overalt.model.Plan;
 
+import java.util.Optional;
 
-@Service
+@Repository
 public interface PlanRepository extends JpaRepository<Plan, Integer> {
-    Plan findByPlan_id(int plan_id);
-    Plan findByPlan_name(String plan_name);
+    Optional<Plan> findByPlan_id(int planId);
+    Optional<Plan> findByPlan_name(String planName);
 }

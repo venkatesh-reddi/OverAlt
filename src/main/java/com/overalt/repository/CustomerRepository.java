@@ -1,16 +1,17 @@
 package com.overalt.repository;
 
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import com.overalt.model.Customer;
 
-@Service
+import java.util.Optional;
+import java.util.List;
+
+@Repository
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
-    Customer findByEmail(String email);
-    Customer findByPhoneNumber(String phoneNumber);
-    Customer findByCustomer_id(int customer_id);
-    List<Customer> findByPlan_id(int plan_id);
+    Optional<Customer> findByEmail(String email);
+    Optional<Customer> findByPhoneNumber(String phoneNumber);
+    Optional<Customer> findByCustomer_id(int customerId); 
+    List<Customer> findByPlan_id(int planId); 
 }
