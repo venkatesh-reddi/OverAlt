@@ -7,7 +7,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "Plans")
-public class Plans {
+public class Plan {
     @Id
     private int plan_id;
     @Column(nullable = false)
