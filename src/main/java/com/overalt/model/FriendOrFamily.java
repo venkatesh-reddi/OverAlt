@@ -1,27 +1,28 @@
 package com.overalt.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 @Entity
 @Table(name = "FriendOrFamily")
 public class FriendOrFamily{
-
     @Id
     private long contactNumber;
     @Column(nullable = false)
     private String contactName;
     @Column(nullable = false)
     private String relationshipType;
-    @Column(nullable = false)
 
     public FriendOrFamily(){
 
     }
 
-    public FriendOrFamily( long contactNumber, String contactNumber, String relationshipType){
+    public FriendOrFamily( long contactNumber, String contactName, String relationshipType){
         this.contactNumber = contactNumber;
         this.contactName = contactName;
         this.relationshipType = relationshipType;
-
-     
     }
 
     public long getContactNumber() {
@@ -40,7 +41,7 @@ public class FriendOrFamily{
         this.contactName = contactName;
     }
 
-    public long getRelationType() {
+    public String getRelationType() {
         return relationshipType;
     }
 
@@ -52,9 +53,6 @@ public class FriendOrFamily{
         return  "FriendOrFamily{" +
         "Contact Number=" + contactNumber +
         ", Contact Name='" + contactName + '\'' +
-        ", Relationship Type ='" + relationshipType + '\'' +
-
+        ", Relationship Type ='" + relationshipType + '\'' ;
     }
-
-
 }
