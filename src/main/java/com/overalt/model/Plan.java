@@ -7,7 +7,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "Plans")
-public class Plans {
+public class Plan {
     @Id
     private int plan_id;
     @Column(nullable = false)
@@ -23,11 +23,11 @@ public class Plans {
     @Column(nullable = false)
     private int max_friends;
 
-    public Plans(){
+    public Plan(){
 
     }
        
-    public Plans(int plan_id, String plan_name, int call_minutes, int data_limit, double monthly_cost, int max_family_members, int max_friends) {
+    public Plan(int plan_id, String plan_name, int call_minutes, int data_limit, double monthly_cost, int max_family_members, int max_friends) {
         this.plan_id = plan_id;
         this.plan_name = plan_name;
         this.call_minutes = call_minutes;
