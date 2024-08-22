@@ -34,7 +34,7 @@ public class Customer {
     private String address;
 
     @ManyToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name = "plan_id", nullable = false)
+    @JoinColumn(nullable = false)
     private int planId;
 
     @Column(nullable = false)
@@ -42,7 +42,6 @@ public class Customer {
 
     @Column(nullable = false)
     private int currentFriendsCount;
-
 
     // Default Constructor
     public Customer() {}
