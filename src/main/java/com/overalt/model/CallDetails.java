@@ -3,11 +3,14 @@ package com.overalt.model;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 
@@ -19,10 +22,12 @@ public class CallDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer callId;
 
-    @Column(name = "caller_id", nullable = false)
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = "caller_id", nullable = false)
     private Long callerId;
 
-    @Column(name = "receiver_id", nullable = false)
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = "receiver_id", nullable = false)
     private Long receiverId;
 
     @Column(name = "call_start_time", nullable = false)
