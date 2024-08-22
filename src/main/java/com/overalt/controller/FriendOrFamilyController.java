@@ -11,11 +11,8 @@ import com.overalt.service.FriendOrFamilyService;
 public class FriendOrFamilyController {
 
     @Autowired
-    private final FriendOrFamilyService friendOrFamilyService;
+    FriendOrFamilyService friendOrFamilyService;
 
-    public FriendOrFamilyController(FriendOrFamilyService friendOrFamilyService) {
-        this.friendOrFamilyService = friendOrFamilyService;
-    }
 
     @PostMapping("/updateContactNumber")
     public String updateContactNumber(@RequestParam long oldContactNumber, @RequestParam long newContactNumber) {

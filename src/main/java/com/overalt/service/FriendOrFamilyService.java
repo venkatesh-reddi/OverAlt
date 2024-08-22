@@ -9,12 +9,8 @@ import com.overalt.repository.FriendOrFamilyRepository;
 @Service
 public class FriendOrFamilyService {
 
-    private final FriendOrFamilyRepository friendOrFamilyRepository;
-
     @Autowired
-    public FriendOrFamilyService(FriendOrFamilyRepository friendOrFamilyRepository) {
-        this.friendOrFamilyRepository = friendOrFamilyRepository;
-    }
+    FriendOrFamilyRepository friendOrFamilyRepository;
 
     public boolean updateContactNumber(long oldContactNumber, long newContactNumber) {
         FriendOrFamily friendOrFamily = friendOrFamilyRepository.findByContactNumber(oldContactNumber);

@@ -1,5 +1,6 @@
 package com.overalt.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,11 +15,8 @@ import java.util.Optional;
 @RestController
 public class CustomerController {
 
-    private final CustomerService customerService;
-
-    public CustomerController(CustomerService customerService) {
-        this.customerService = customerService;
-    }
+	@Autowired
+    CustomerService customerService;
 
     @GetMapping("/getCustomerByEmail")
     public ResponseEntity<Customer> getCustomerByEmail(@RequestParam String email) {

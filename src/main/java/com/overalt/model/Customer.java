@@ -1,39 +1,33 @@
 package com.overalt.model;
 
-import javax.persistence.*;
-import javax.validation.constraints.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "customers")
+@Table
 public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Assuming customer_id is auto-generated
     private int customerId;
 
-    @Column(nullable = false, length = 50)
-    @NotNull
-    @Size(max = 50)
+    @Column(nullable = false)
     private String firstName;
 
-    @Column(nullable = false, length = 50)
-    @NotNull
-    @Size(max = 50)
+    @Column(nullable = false)
     private String lastName;
 
-    @Column(unique = true, nullable = false, length = 15)
-    @NotNull
-    @Size(max = 15)
+    @Column(unique = true, nullable = false)
     private String phoneNumber;
 
-    @Column(unique = true, nullable = false, length = 100)
-    @NotNull
-    @Email
-    @Size(max = 100)
+    @Column(unique = true, nullable = false)
     private String email;
 
     @Column(nullable = false, length = 255)
-    @NotNull
     private String address;
 
     @Column(nullable = false)

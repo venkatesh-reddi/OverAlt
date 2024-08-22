@@ -3,10 +3,16 @@ package com.overalt.model;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-import javax.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 
 @Entity
-@Table(name = "call_details")
+@Table
 public class CallDetails {
 
     @Id

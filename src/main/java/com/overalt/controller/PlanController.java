@@ -14,12 +14,9 @@ import java.util.Optional;
 @RestController
 public class PlanController {
 
-    private final PlanService planService;
+	@Autowired
+    PlanService planService;
 
-    @Autowired
-    public PlanController(PlanService planService) {
-        this.planService = planService;
-    }
 
     @GetMapping("/getPlanById")
     public ResponseEntity<Plan> getPlanById(@RequestParam int planId) {

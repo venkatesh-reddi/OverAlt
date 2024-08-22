@@ -12,26 +12,22 @@ import com.overalt.repository.CustomerRepository;
 @Service
 public class CustomerService {
 
-    @Autowired
-    private final CustomerRepository customerRepository;
+	@Autowired
+	CustomerRepository customerRepository;
 
-    public CustomerService(CustomerRepository customerRepository) {
-        this.customerRepository = customerRepository;
-    }
+	public Optional<Customer> getCustomerByEmail(String email) {
+		return customerRepository.findByEmail(email);
+	}
 
-    public Optional<Customer> getCustomerByEmail(String email) {
-        return customerRepository.findByEmail(email);
-    }
+	public Optional<Customer> getCustomerByPhoneNumber(String phoneNumber) {
+		return customerRepository.findByPhoneNumber(phoneNumber);
+	}
 
-    public Optional<Customer> getCustomerByPhoneNumber(String phoneNumber) {
-        return customerRepository.findByPhoneNumber(phoneNumber);
-    }
+	public Optional<Customer> getCustomerById(int customerId) {
+		return customerRepository.findByCustomerId(customerId);
+	}
 
-    public Optional<Customer> getCustomerById(int customerId) {
-        return customerRepository.findByCustomer_id(customerId);
-    }
-
-    public List<Customer> getCustomersByPlanId(int planId) {
-        return customerRepository.findByPlan_id(planId);
-    }
+	public List<Customer> getCustomersByPlanId(int planId) {
+		return customerRepository.findByPlanId(planId);
+	}
 }

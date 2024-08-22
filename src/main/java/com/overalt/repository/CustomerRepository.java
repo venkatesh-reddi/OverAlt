@@ -12,6 +12,6 @@ import java.util.List;
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
     Optional<Customer> findByEmail(String email);
     Optional<Customer> findByPhoneNumber(String phoneNumber);
-    Optional<Customer> findByCustomer_id(int customerId); 
-    List<Customer> findByPlan_id(int planId); 
+    Optional<Customer> findByCustomerId(int customerId); 
+    List<Customer> findByPlanId(int planId); 
 }

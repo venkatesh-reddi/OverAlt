@@ -11,13 +11,9 @@ import com.overalt.repository.CallDetailsRepository;
 
 @Service
 public class CallDetailsService {
-
-    private final CallDetailsRepository callDetailsRepository;
-
+    
     @Autowired
-    public CallDetailsService(CallDetailsRepository callDetailsRepository) {
-        this.callDetailsRepository = callDetailsRepository;
-    }
+    CallDetailsRepository callDetailsRepository;
 
     public CallDetails saveCallDetails(CallDetails callDetails) {
         callDetails.calculateCallDuration();

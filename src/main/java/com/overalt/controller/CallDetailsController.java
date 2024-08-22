@@ -3,6 +3,7 @@ package com.overalt.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,12 +14,9 @@ import com.overalt.service.CallDetailsService;
 @RequestMapping("/calls")
 public class CallDetailsController {
 
-    private final CallDetailsService callDetailsService;
+	@Autowired
+    CallDetailsService callDetailsService;
 
-    // Constructor-based dependency injection
-    public CallDetailsController(CallDetailsService callDetailsService) {
-        this.callDetailsService = callDetailsService;
-    }
 
     @PostMapping
     public ResponseEntity<CallDetails> addCallDetails(@RequestBody CallDetails callDetails) {
