@@ -1,7 +1,5 @@
 package com.overalt.service;
 
-
-
 import java.util.List;
 import java.util.Optional;
 
@@ -14,8 +12,12 @@ import com.overalt.repository.CallDetailsRepository;
 @Service
 public class CallDetailsService {
 
+    private final CallDetailsRepository callDetailsRepository;
+
     @Autowired
-    private CallDetailsRepository callDetailsRepository;
+    public CallDetailsService(CallDetailsRepository callDetailsRepository) {
+        this.callDetailsRepository = callDetailsRepository;
+    }
 
     public CallDetails saveCallDetails(CallDetails callDetails) {
         callDetails.calculateCallDuration();
