@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+
 @Entity
 @Table
 public class Customer {
@@ -34,8 +35,8 @@ public class Customer {
     private String address;
 
     @ManyToOne(cascade=CascadeType.ALL)
-    @JoinColumn(nullable = false)
-    private int planId;
+    @JoinColumn(name = "plan_id")
+    Plan plan;
 
     @Column(nullable = false)
     private int currentFamilyCount;
@@ -47,13 +48,13 @@ public class Customer {
     public Customer() {}
 
     // Constructor without customerId
-    public Customer(String firstName, String lastName, String phoneNumber, String email, String address, int planId, int currentFamilyCount, int currentFriendsCount) {
+    public Customer(String firstName, String lastName, String phoneNumber, String email, String address, Plan plan, int currentFamilyCount, int currentFriendsCount) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.address = address;
-        this.planId = planId;
+        this.plan = plan;
         this.currentFamilyCount = currentFamilyCount;
         this.currentFriendsCount = currentFriendsCount;
     }
@@ -107,13 +108,6 @@ public class Customer {
         this.address = address;
     }
 
-    public int getPlanId() {
-        return planId;
-    }
-
-    public void setPlanId(int planId) {
-        this.planId = planId;
-    }
 
     public int getCurrentFamilyCount() {
         return currentFamilyCount;
@@ -131,6 +125,14 @@ public class Customer {
         this.currentFriendsCount = currentFriendsCount;
     }
 
+    public Plan getPlan() {
+        return plan;
+    }
+
+    public void setPlan(Plan plan) {
+        this.plan = plan;
+    }
+
     @Override
     public String toString() {
         return "Customer{" +
@@ -140,7 +142,7 @@ public class Customer {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", address='" + address + '\'' +
-                ", planId=" + planId +
+                ", planId=" + plan +
                 ", currentFamilyCount=" + currentFamilyCount +
                 ", currentFriendsCount=" + currentFriendsCount +
                 '}';

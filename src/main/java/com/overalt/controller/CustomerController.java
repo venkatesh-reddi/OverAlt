@@ -1,5 +1,8 @@
 package com.overalt.controller;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,10 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.overalt.model.Customer;
+import com.overalt.model.Plan;
 import com.overalt.service.CustomerService;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class CustomerController {
@@ -40,8 +41,8 @@ public class CustomerController {
     }
 
     @GetMapping("/getCustomersByPlanId")
-    public ResponseEntity<List<Customer>> getCustomersByPlanId(@RequestParam int planId) {
-        List<Customer> customers = customerService.getCustomersByPlanId(planId);
+    public ResponseEntity<List<Customer>> getCustomersByPlanId(@RequestParam Plan plan) {
+        List<Customer> customers = customerService.getCustomersByPlan(plan);
         return customers.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(customers);
     }
 }

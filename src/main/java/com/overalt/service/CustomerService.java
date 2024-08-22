@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.overalt.model.Customer;
+import com.overalt.model.Plan;
 import com.overalt.repository.CustomerRepository;
 
 @Service
@@ -27,7 +28,7 @@ public class CustomerService {
 		return customerRepository.findByCustomerId(customerId);
 	}
 
-	public List<Customer> getCustomersByPlanId(int planId) {
-		return customerRepository.findByPlanId(planId);
+	public List<Customer> getCustomersByPlan(Plan plan) {
+		return customerRepository.findByPlan(plan);
 	}
 }

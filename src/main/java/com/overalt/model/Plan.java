@@ -1,11 +1,12 @@
 package com.overalt.model;
 
-import jakarta.persistence.Entity;
-
 import java.math.BigDecimal;
+import java.util.List;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -18,6 +19,9 @@ public class Plan {
 
     @Column(name = "plan_name", nullable = false)
     private String planName;
+
+    @OneToMany(mappedBy = "plan")
+    private List<Customer> customers;
 
     @Column(name = "monthly_cost", nullable = false)
     private BigDecimal monthlyCost;
@@ -105,6 +109,13 @@ public class Plan {
         this.maxFriends = maxFriends;
     }
 
+    public List<Customer> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(List<Customer> customers) {
+        this.customers = customers;
+    }
     // Method to display plan details
     @Override
     public String toString() {
