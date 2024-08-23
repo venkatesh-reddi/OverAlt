@@ -3,6 +3,8 @@ package com.overalt.model;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -20,6 +22,7 @@ public class Plan {
     @Column(name = "plan_name", nullable = false)
     private String planName;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "plan")
     private List<Customer> customers;
 
