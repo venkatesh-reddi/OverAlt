@@ -1,4 +1,4 @@
-# OverAlt Project
+# OverAlt
 
 ## Overview
 
@@ -12,6 +12,7 @@ The OverAlt project is a comprehensive Java-based Spring Boot application design
 - [Setup Instructions](#setup-instructions)
 - [Database Structure](#database-structure)
 - [Java Classes and Methods](#java-classes-and-methods)
+- [Endpoints](#endpoints)
 - [Usage](#usage)
 - [Workflow](#workflow)
 - [Testing the APIs](#testing-the-apis)
@@ -22,9 +23,9 @@ The OverAlt project is a comprehensive Java-based Spring Boot application design
 
 ## Features
 
-- **Customer Management**: Create, retrieve, and manage customer details, including their assigned plans.
+- **Customer Management**: Create, retrieve, update, and delete customer details, including their assigned plans.
 - **Plan Management**: Define different plans with specific limits on family members and friends.
-- **Friends and Family List**: Allow customers to add a certain number of friends and family members based on their plan.
+- **Friends and Family List**: Allow customers to add, retrieve, and delete friends and family members based on their plan.
 - **Call Management**: Track and log call details, ensuring calls are only allowed to authorized contacts.
 - **Data Generation**: Populate the database with random data for testing purposes.
 
@@ -249,6 +250,103 @@ The `DataGenerator` class provides utility methods to generate random data for t
 - `generateRandomFriendOrFamily(String relationshipType)`: Generates a random friend or family member.
 - `generateRandomCallDetails(Customer customer)`: Generates random call details for a customer.
 
+## Endpoints
+
+### CallDetails Endpoints
+1. **Create a new call detail**
+   - **Endpoint**: `POST /api/call-details`
+   - **Request Body**: `CallDetails` object
+   - **Response**: Created `CallDetails` object
+
+2. **Get a call detail by ID**
+   - **Endpoint**: `GET /api/call-details/{callId}`
+   - **Path Variable**: `callId`
+   - **Response**: `CallDetails` object
+
+3. **Get all call details**
+   - **Endpoint**: `GET /api/call-details`
+   - **Response**: List of `CallDetails` objects
+
+4. **Get call details by caller ID**
+   - **Endpoint**: `GET /api/call-details/caller/{callerId}`
+   - **Path Variable**: `callerId`
+   - **Response**: List of `CallDetails` objects
+
+5. **Get call details by receiver ID**
+   - **Endpoint**: `GET /api/call-details/receiver/{receiverId}`
+   - **Path Variable**: `receiverId
+
+`
+   - **Response**: List of `CallDetails` objects
+
+### Customer Endpoints
+1. **Create a new customer**
+   - **Endpoint**: `POST /api/customers`
+   - **Request Body**: `Customer` object
+   - **Response**: Created `Customer` object
+
+2. **Get a customer by ID**
+   - **Endpoint**: `GET /api/customers/{id}`
+   - **Path Variable**: `id`
+   - **Response**: `Customer` object
+
+3. **Get all customers**
+   - **Endpoint**: `GET /api/customers`
+   - **Response**: List of `Customer` objects
+
+4. **Update a customer**
+   - **Endpoint**: `PUT /api/customers/{id}`
+   - **Path Variable**: `id`
+   - **Request Body**: `Customer` object
+   - **Response**: Updated `Customer` object
+
+5. **Delete a customer**
+   - **Endpoint**: `DELETE /api/customers/{id}`
+   - **Path Variable**: `id`
+   - **Response**: Status message
+
+### Plan Endpoints
+1. **Create a new plan**
+   - **Endpoint**: `POST /api/plans`
+   - **Request Body**: `Plan` object
+   - **Response**: Created `Plan` object
+
+2. **Get a plan by ID**
+   - **Endpoint**: `GET /api/plans/{id}`
+   - **Path Variable**: `id`
+   - **Response**: `Plan` object
+
+3. **Get all plans**
+   - **Endpoint**: `GET /api/plans`
+   - **Response**: List of `Plan` objects
+
+4. **Update a plan**
+   - **Endpoint**: `PUT /api/plans/{id}`
+   - **Path Variable**: `id`
+   - **Request Body**: `Plan` object
+   - **Response**: Updated `Plan` object
+
+5. **Delete a plan**
+   - **Endpoint**: `DELETE /api/plans/{id}`
+   - **Path Variable**: `id`
+   - **Response**: Status message
+
+### FriendsAndFamily Endpoints
+1. **Add a friend or family member**
+   - **Endpoint**: `POST /api/friends-family`
+   - **Request Body**: `FriendOrFamily` object
+   - **Response**: Created `FriendOrFamily` object
+
+2. **Get all friends and family for a customer**
+   - **Endpoint**: `GET /api/friends-family/{customerId}`
+   - **Path Variable**: `customerId`
+   - **Response**: List of `FriendOrFamily` objects
+
+3. **Delete a friend or family member**
+   - **Endpoint**: `DELETE /api/friends-family/{customerId}/{contactNumber}`
+   - **Path Variables**: `customerId`, `contactNumber`
+   - **Response**: Status message
+
 ## Usage
 
 1. **Setup**: Configure your database and ensure the tables are set up according to the provided structure.
@@ -265,21 +363,7 @@ The `DataGenerator` class provides utility methods to generate random data for t
 
 ## Testing the APIs
 
-Use tools like Postman or cURL to test the following endpoints:
-
-- **Customer Management**:
-  - `GET /getCustomer
-
-ById/{id}`
-  - `POST /addCustomer`
-- **Plan Management**:
-  - `GET /getPlanById/{id}`
-  - `POST /addPlan`
-- **Friends and Family Management**:
-  - `POST /addFamilyMember`
-  - `POST /addFriend`
-- **Call Management**:
-  - `POST /makeCall`
+Use tools like Postman or cURL to test the endpoints described above.
 
 ### Example cURL Command:
 
