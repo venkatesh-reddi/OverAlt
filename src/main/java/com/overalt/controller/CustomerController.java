@@ -4,45 +4,70 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.overalt.model.Customer;
-import com.overalt.model.Plan;
-import com.overalt.service.CustomerService;
+import com.overalt.repository.CustomerRepository;
 
 @RestController
+@RequestMapping("/customers")
 public class CustomerController {
 
-	@Autowired
-    CustomerService customerService;
+    @Autowired
+    private CustomerRepository customerRepository;
 
-    @GetMapping("/getCustomerByEmail")
-    public ResponseEntity<Customer> getCustomerByEmail(@RequestParam String email) {
-        Optional<Customer> customer = customerService.getCustomerByEmail(email);
-        return customer.map(ResponseEntity::ok)
-                       .orElseGet(() -> ResponseEntity.notFound().build());
+    // Create a new customer
+    @PostMapping
+    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
+        Customer savedCustomer = customerRepository.save(customer);
+        return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);
     }
 
-    @GetMapping("/getCustomerByPhoneNumber")
-    public ResponseEntity<Customer> getCustomerByPhoneNumber(@RequestParam String phoneNumber) {
-        Optional<Customer> customer = customerService.getCustomerByPhoneNumber(phoneNumber);
-        return customer.map(ResponseEntity::ok)
-                       .orElseGet(() -> ResponseEntity.notFound().build());
+    // Get a customer by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Customer> getCustomerById(@PathVariable int id) {
+        Optional<Customer> customer = customerRepository.findByCustomerId(id);
+        return customer.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                       .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping("/getCustomerById")
-    public ResponseEntity<Customer> getCustomerById(@RequestParam int customerId) {
-        Optional<Customer> customer = customerService.getCustomerById(customerId);
-        return customer.map(ResponseEntity::ok)
-                       .orElseGet(() -> ResponseEntity.notFound().build());
+    // Get all customers
+    @GetMapping
+    public List<Customer> getAllCustomers() {
+        return customerRepository.findAll();
     }
 
-    @GetMapping("/getCustomersByPlanId")
-    public ResponseEntity<List<Customer>> getCustomersByPlanId(@RequestParam Plan plan) {
-        List<Customer> customers = customerService.getCustomersByPlan(plan);
-        return customers.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(customers);
+    // Update an existing customer
+    @PutMapping("/{id}")
+    public ResponseEntity<Customer> updateCustomer(@PathVariable int id, @RequestBody Customer customerDetails) {
+        Optional<Customer> customerOptional = customerRepository.findByCustomerId(id);
+        if (customerOptional.isPresent()) {
+            Customer customer = customerOptional.get();
+            customer.setFirstName(customerDetails.getFirstName());
+            customer.setLastName(customerDetails.getLastName());
+            customer.setPhoneNumber(customerDetails.getPhoneNumber());
+            customer.setEmail(customerDetails.getEmail());
+            customer.setAddress(customerDetails.getAddress());
+            customer.setPlan(customerDetails.getPlan());
+            customer.setCurrentFamilyCount(customerDetails.getCurrentFamilyCount());
+            customer.setCurrentFriendsCount(customerDetails.getCurrentFriendsCount());
+            Customer updatedCustomer = customerRepository.save(customer);
+            return new ResponseEntity<>(updatedCustomer, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // Delete a customer
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> deleteCustomer(@PathVariable int id) {
+        try {
+            customerRepository.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

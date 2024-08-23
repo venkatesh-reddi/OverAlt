@@ -1,5 +1,6 @@
 package com.overalt.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,4 +13,8 @@ public interface CallDetailsRepository extends JpaRepository<CallDetails, Intege
     List<CallDetails> findByCallerId(Long callerId);
     List<CallDetails> findByReceiverId(Long receiverId);
     List<CallDetails> findByCallerIdAndReceiverId(Long callerId, Long receiverId);
+    List<CallDetails> findByCallStartTimeBetween(LocalDateTime startTime, LocalDateTime endTime);
+
+    void deleteByCallerId(Long callerId);
+    void deleteByReceiverId(Long receiverId);
 }
