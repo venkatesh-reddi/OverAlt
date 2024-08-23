@@ -1,5 +1,7 @@
 package com.overalt.model;
 
+import java.util.List;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 
@@ -18,6 +21,9 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Assuming customer_id is auto-generated
     private int customerId;
+
+    @OneToMany(mappedBy = "customer")
+    private List<FriendOrFamily> friendOrFamily;
 
     @Column(nullable = false)
     private String firstName;
@@ -131,6 +137,14 @@ public class Customer {
 
     public void setPlan(Plan plan) {
         this.plan = plan;
+    }
+
+    public List<FriendOrFamily> getFriendOrFamily() {
+        return friendOrFamily;
+    }
+
+    public void setCustomers(List<FriendOrFamily> friendOrFamily) {
+        this.friendOrFamily = friendOrFamily;
     }
 
     @Override
