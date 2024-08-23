@@ -1,29 +1,143 @@
-# OverAlt
+# OverAlt Project
 
 ## Overview
-This project is a Java-based telecommunication application that manages customers, their chosen plans, friends and family lists, and call details. The application ensures that customers can only add a specified number of family members and friends based on their selected plan, and allows calls only to those contacts.
+
+The OverAlt project is a comprehensive Java-based Spring Boot application designed to manage telecommunication services. It facilitates the management of customers, their selected plans, friends and family lists, and call details. The application ensures that customers can only add a specified number of family members and friends based on their chosen plan and allows calls only to those contacts. The application uses PostgreSQL as its database and provides RESTful APIs for various operations.
 
 ## Table of Contents
+
 - [Features](#features)
+- [Technology Stack](#technology-stack)
+- [Prerequisites](#prerequisites)
+- [Setup Instructions](#setup-instructions)
 - [Database Structure](#database-structure)
 - [Java Classes and Methods](#java-classes-and-methods)
-  - [Customer Class](#customer-class)
-  - [Plan Class](#plan-class)
-  - [FriendOrFamily Class](#friendorfamily-class)
-  - [CallDetails Class](#calldetails-class)
-  - [DataGenerator Class](#datagenerator-class)
 - [Usage](#usage)
 - [Workflow](#workflow)
+- [Testing the APIs](#testing-the-apis)
+- [Directory Structure](#directory-structure)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
 - [License](#license)
 
 ## Features
-- **Customer Management**: Store and manage customer details, including their assigned plans.
+
+- **Customer Management**: Create, retrieve, and manage customer details, including their assigned plans.
 - **Plan Management**: Define different plans with specific limits on family members and friends.
 - **Friends and Family List**: Allow customers to add a certain number of friends and family members based on their plan.
 - **Call Management**: Track and log call details, ensuring calls are only allowed to authorized contacts.
 - **Data Generation**: Populate the database with random data for testing purposes.
 
+## Technology Stack
+
+- **Backend**: Spring Boot, Java
+- **Database**: PostgreSQL
+- **Persistence**: JPA/Hibernate
+- **API Testing**: Postman, cURL
+
+## Prerequisites
+
+- Java 17 or higher
+- PostgreSQL 12 or higher
+- Maven or Gradle (for building the project)
+- IDE (e.g., IntelliJ IDEA, Eclipse)
+
+## Setup Instructions
+
+### 1. Install PostgreSQL
+
+Follow the installation guide for PostgreSQL based on your operating system:
+- [PostgreSQL Downloads](https://www.postgresql.org/download/)
+
+### 2. Create a PostgreSQL Database
+
+1. **Access PostgreSQL**: Use the PostgreSQL interactive terminal (psql) or a GUI tool like pgAdmin.
+
+   ```bash
+   sudo -u postgres psql
+   ```
+
+2. **Create Database and User**:
+
+   ```sql
+   CREATE DATABASE overalt_db;
+   CREATE USER overalt_user WITH ENCRYPTED PASSWORD 'yourpassword';
+   GRANT ALL PRIVILEGES ON DATABASE overalt_db TO overalt_user;
+   ```
+
+3. **Exit psql**:
+
+   ```sql
+   \q
+   ```
+
+### 3. Configure Spring Boot Application
+
+1. **Add Dependencies**: Update `pom.xml` or `build.gradle` for PostgreSQL.
+
+   **Maven (`pom.xml`):**
+
+   ```xml
+   <dependency>
+       <groupId>org.springframework.boot</groupId>
+       <artifactId>spring-boot-starter-data-jpa</artifactId>
+   </dependency>
+   <dependency>
+       <groupId>org.postgresql</groupId>
+       <artifactId>postgresql</artifactId>
+   </dependency>
+   ```
+
+   **Gradle (`build.gradle`):**
+
+   ```gradle
+   implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+   implementation 'org.postgresql:postgresql'
+   ```
+
+2. **Configure Database Connection**: Update `src/main/resources/application.properties`.
+
+   ```properties
+   spring.datasource.url=jdbc:postgresql://localhost:5432/overalt_db
+   spring.datasource.username=overalt_user
+   spring.datasource.password=yourpassword
+   spring.jpa.hibernate.ddl-auto=update
+   spring.jpa.show-sql=true
+   spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+   ```
+
+### 4. Build and Run the Application
+
+1. **Build the Project**:
+
+   **Maven:**
+
+   ```bash
+   ./mvnw clean install
+   ```
+
+   **Gradle:**
+
+   ```bash
+   ./gradlew build
+   ```
+
+2. **Run the Application**:
+
+   **Maven:**
+
+   ```bash
+   ./mvnw spring-boot:run
+   ```
+
+   **Gradle:**
+
+   ```bash
+   ./gradlew bootRun
+   ```
+
 ## Database Structure
+
 The application uses the following database tables:
 
 ### Customers Table
@@ -55,7 +169,7 @@ The application uses the following database tables:
 ### CallDetails Table
 - `call_id` (Primary Key)
 - `caller_id` (Foreign Key referencing Customers table)
-- `reciever_id`
+- `receiver_id`
 - `call_start_time`
 - `call_end_time`
 - `call_duration`
@@ -117,14 +231,14 @@ The `CallDetails` class manages the details of calls made by the customer.
 #### Attributes:
 - `call_id` (Primary Key)
 - `caller_id` (Foreign Key referencing Customers table)
-- `reciever_id`
+- `receiver_id`
 - `call_start_time`
 - `call_end_time`
 - `call_duration`
 
 #### Methods:
 - `calculateCallDuration()`: Calculates the duration of the call.
-- `getCallDetails()`: gets call details by callid or caller_id
+- `getCallDetails()`: Retrieves call details by `callId` or `caller_id`.
 
 ### DataGenerator Class
 The `DataGenerator` class provides utility methods to generate random data for testing.
@@ -136,16 +250,79 @@ The `DataGenerator` class provides utility methods to generate random data for t
 - `generateRandomCallDetails(Customer customer)`: Generates random call details for a customer.
 
 ## Usage
+
 1. **Setup**: Configure your database and ensure the tables are set up according to the provided structure.
 2. **Data Population**: Use the `DataGenerator` class to populate the database with random customers, plans, friends, and family members.
 3. **Operations**: Use the `Customer` class methods to add friends, family members, and make calls according to the rules of the selected plan.
 4. **Call Logging**: The application will automatically log call details and enforce plan rules.
 
 ## Workflow
+
 1. **Customer Creation**: Generate or manually create customers and assign them plans.
 2. **Adding Contacts**: Use the `addFamilyMember()` and `addFriend()` methods in the `Customer` class to add contacts.
 3. **Making Calls**: Use the `makeCall()` method to initiate calls, which will be allowed or blocked based on the plan and contact list.
 4. **Logging Calls**: Call details are logged automatically, ensuring compliance with the plan’s rules.
 
+## Testing the APIs
+
+Use tools like Postman or cURL to test the following endpoints:
+
+- **Customer Management**:
+  - `GET /getCustomer
+
+ById/{id}`
+  - `POST /addCustomer`
+- **Plan Management**:
+  - `GET /getPlanById/{id}`
+  - `POST /addPlan`
+- **Friends and Family Management**:
+  - `POST /addFamilyMember`
+  - `POST /addFriend`
+- **Call Management**:
+  - `POST /makeCall`
+
+### Example cURL Command:
+
+```bash
+curl -X POST http://localhost:8080/api/customers -H "Content-Type: application/json" -d '{"firstName":"John","lastName":"Doe","phoneNumber":"1234567890","email":"johndoe@example.com","address":"123 Main St","planId":1}'
+```
+
+## Directory Structure
+
+```plaintext
+overalt/
+│
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   ├── com/
+│   │   │   │   ├── overalt/
+│   │   │   │   │   ├── controller/
+│   │   │   │   │   ├── model/
+│   │   │   │   │   ├── repository/
+│   │   │   │   │   ├── service/
+│   │   │   │   │   ├── OverAltApplication.java
+│   │   │   │   │   └── config/
+│   │   └── resources/
+│   │       ├── application.properties
+│   │       └── static/
+│   └── test/
+│       ├── java/
+│       └── resources/
+│
+└── README.md
+```
+
+## Troubleshooting
+
+- **Database Connection Issues**: Ensure PostgreSQL is running, and the credentials in `application.properties` are correct.
+- **Dependency Issues**: Ensure all necessary dependencies are correctly added to `pom.xml` or `build.gradle`.
+- **API Errors**: Use Postman or cURL to debug API requests and verify the correctness of your payloads.
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and create a pull request with your changes. Ensure that your code is well-documented and follows the project's coding standards.
+
 ## License
-Licensed under the Apache License, Version 2.0.
+
+This project is licensed under the Apache License Version 2.0 - see the [LICENSE](LICENSE) file for details.
