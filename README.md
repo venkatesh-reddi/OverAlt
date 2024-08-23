@@ -254,26 +254,26 @@ The `DataGenerator` class provides utility methods to generate random data for t
 
 ### CallDetails Endpoints
 1. **Create a new call detail**
-   - **Endpoint**: `POST /api/call-details`
+   - **Endpoint**: `POST /call-details`
    - **Request Body**: `CallDetails` object
    - **Response**: Created `CallDetails` object
 
 2. **Get a call detail by ID**
-   - **Endpoint**: `GET /api/call-details/{callId}`
+   - **Endpoint**: `GET /call-details/{callId}`
    - **Path Variable**: `callId`
    - **Response**: `CallDetails` object
 
 3. **Get all call details**
-   - **Endpoint**: `GET /api/call-details`
+   - **Endpoint**: `GET /call-details`
    - **Response**: List of `CallDetails` objects
 
 4. **Get call details by caller ID**
-   - **Endpoint**: `GET /api/call-details/caller/{callerId}`
+   - **Endpoint**: `GET /call-details/caller/{callerId}`
    - **Path Variable**: `callerId`
    - **Response**: List of `CallDetails` objects
 
 5. **Get call details by receiver ID**
-   - **Endpoint**: `GET /api/call-details/receiver/{receiverId}`
+   - **Endpoint**: `GET /call-details/receiver/{receiverId}`
    - **Path Variable**: `receiverId
 
 `
@@ -281,69 +281,69 @@ The `DataGenerator` class provides utility methods to generate random data for t
 
 ### Customer Endpoints
 1. **Create a new customer**
-   - **Endpoint**: `POST /api/customers`
+   - **Endpoint**: `POST /customers`
    - **Request Body**: `Customer` object
    - **Response**: Created `Customer` object
 
 2. **Get a customer by ID**
-   - **Endpoint**: `GET /api/customers/{id}`
+   - **Endpoint**: `GET /customers/{id}`
    - **Path Variable**: `id`
    - **Response**: `Customer` object
 
 3. **Get all customers**
-   - **Endpoint**: `GET /api/customers`
+   - **Endpoint**: `GET /customers`
    - **Response**: List of `Customer` objects
 
 4. **Update a customer**
-   - **Endpoint**: `PUT /api/customers/{id}`
+   - **Endpoint**: `PUT /customers/{id}`
    - **Path Variable**: `id`
    - **Request Body**: `Customer` object
    - **Response**: Updated `Customer` object
 
 5. **Delete a customer**
-   - **Endpoint**: `DELETE /api/customers/{id}`
+   - **Endpoint**: `DELETE /customers/{id}`
    - **Path Variable**: `id`
    - **Response**: Status message
 
 ### Plan Endpoints
 1. **Create a new plan**
-   - **Endpoint**: `POST /api/plans`
+   - **Endpoint**: `POST /plans`
    - **Request Body**: `Plan` object
    - **Response**: Created `Plan` object
 
 2. **Get a plan by ID**
-   - **Endpoint**: `GET /api/plans/{id}`
+   - **Endpoint**: `GET /plans/{id}`
    - **Path Variable**: `id`
    - **Response**: `Plan` object
 
 3. **Get all plans**
-   - **Endpoint**: `GET /api/plans`
+   - **Endpoint**: `GET /plans`
    - **Response**: List of `Plan` objects
 
 4. **Update a plan**
-   - **Endpoint**: `PUT /api/plans/{id}`
+   - **Endpoint**: `PUT /plans/{id}`
    - **Path Variable**: `id`
    - **Request Body**: `Plan` object
    - **Response**: Updated `Plan` object
 
 5. **Delete a plan**
-   - **Endpoint**: `DELETE /api/plans/{id}`
+   - **Endpoint**: `DELETE /plans/{id}`
    - **Path Variable**: `id`
    - **Response**: Status message
 
 ### FriendsAndFamily Endpoints
 1. **Add a friend or family member**
-   - **Endpoint**: `POST /api/friends-family`
+   - **Endpoint**: `POST /friends-family`
    - **Request Body**: `FriendOrFamily` object
    - **Response**: Created `FriendOrFamily` object
 
 2. **Get all friends and family for a customer**
-   - **Endpoint**: `GET /api/friends-family/{customerId}`
+   - **Endpoint**: `GET /friends-family/{customerId}`
    - **Path Variable**: `customerId`
    - **Response**: List of `FriendOrFamily` objects
 
 3. **Delete a friend or family member**
-   - **Endpoint**: `DELETE /api/friends-family/{customerId}/{contactNumber}`
+   - **Endpoint**: `DELETE /friends-family/{customerId}/{contactNumber}`
    - **Path Variables**: `customerId`, `contactNumber`
    - **Response**: Status message
 
@@ -368,7 +368,7 @@ Use tools like Postman or cURL to test the endpoints described above.
 ### Example cURL Command:
 
 ```bash
-curl -X POST http://localhost:8080/api/customers -H "Content-Type: application/json" -d '{"firstName":"John","lastName":"Doe","phoneNumber":"1234567890","email":"johndoe@example.com","address":"123 Main St","planId":1}'
+curl -X POST http://localhost:8080/customers -H "Content-Type: application/json" -d '{"firstName":"John","lastName":"Doe","phoneNumber":"1234567890","email":"johndoe@example.com","address":"123 Main St","planId":1}'
 ```
 
 ## Directory Structure
