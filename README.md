@@ -274,10 +274,10 @@ The `DataGenerator` class provides utility methods to generate random data for t
 
 5. **Get call details by receiver ID**
    - **Endpoint**: `GET /call-details/receiver/{receiverId}`
-   - **Path Variable**: `receiverId
+   - **Path Variable**: `receiverId`
+   - **Response**: List of `
 
-`
-   - **Response**: List of `CallDetails` objects
+CallDetails` objects
 
 ### Customer Endpoints
 1. **Create a new customer**
