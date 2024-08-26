@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Call Details</title>
+    <link rel="stylesheet" href="./css/styles.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin-right: 10px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+        .container {
+            padding: 20px;
+            text-align: center;
+        }
+        .button {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .filter-container {
+            margin-top: 20px;
+            text-align: left;
+            max-width: 500px;
+            margin: 20px auto;
+        }
+        .filter-container label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        .filter-container input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .table-container {
+            display: none; /* Initially hidden */
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            max-width: 1200px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body onload="loadHeader()">
+
+    <!-- Header will be injected here -->
+    <header id="header"></header>
+
+    <div class="container">
+        <h1>Call Details</h1>
+        <a href="#" class="button" onclick="showAllCalls()">Show All</a>
+        <a href="#" class="button" onclick="showByCallId()">Show by Call ID</a>
+        <a href="#" class="button" onclick="showByCallerId()">Show by Caller ID</a>
+        <a href="#" class="button" onclick="showByReceiverId()">Show by Receiver ID</a>
+
+        <!-- Filter section for showing call details -->
+        <div id="filter-section" class="filter-container">
+            <label for="callId">Call ID:</label>
+            <input type="text" id="callId" placeholder="Enter Call ID">
+        
+            <label for="callerId">Caller ID:</label>
+            <input type="text" id="callerId" placeholder="Enter Caller ID">
+        
+            <label for="receiverId">Receiver ID:</label>
+            <input type="text" id="receiverId" placeholder="Enter Receiver ID">
+            
+            <button class="button" onclick="fetchCalls()">Search</button>
+        </div>
+        
+        <div id="table-container" class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Call ID</th>
+                        <th>Caller ID</th>
+                        <th>Receiver ID</th>
+                        <th>Call Start Time</th>
+                        <th>Call End Time</th>
+                        <th>Call Duration</th>
+                    </tr>
+                </thead>
+                <tbody id="callTableBody">
+                    <!-- Call rows will be dynamically inserted here -->
+                </tbody>
+            </table>
+        </div>
+        
+
+    <script src="./js/script.js"></script>
+    <script src="./js/calldetails.js"></script>
+</body>
+</html>
