@@ -1,0 +1,45 @@
+/* Reset some default styles */
+body, h1, h2, h3, p, ul {
+    margin: 0;
+    padding: 0;
+}
+
+/* Basic styling for body */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+/* Styling for header and navigation */
+header {
+    background: #333;
+    color: #fff;
+}
+
+nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+}
+
+nav ul li {
+    margin: 0;
+}
+
+nav ul li a {
+    display: block;
+    padding: 15px 20px;
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+    transition: background 0.3s;
+}
+
+nav ul li a:hover {
+    background: #575757;
+}
+
+/* Main content styling */
+main {
+    padding: 20px;
+}
