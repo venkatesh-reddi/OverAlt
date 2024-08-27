@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.overalt.exception.CallDetailsNotFoundException;
+import com.overalt.exception.calldetails.CallDetailsNotFoundException;
 import com.overalt.exception.calldetails.InvalidCallDetailsException;
 import com.overalt.model.CallDetails;
 import com.overalt.repository.CallDetailsRepository;
