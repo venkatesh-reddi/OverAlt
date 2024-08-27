@@ -1,4 +1,4 @@
-package com.overalt.Exception.Customer;
+package com.overalt.exception.customer;
 
 public class InvalidCustomerDataException extends Exception {
     public InvalidCustomerDataException(String message) {
