@@ -48,7 +48,42 @@
 		<artifactId>postgresql</artifactId>
 		<version>42.7.3</version>
 	</dependency>
+    
 
+	<dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-api</artifactId>
+        <version>5.8.2</version> <!-- Use the latest version -->
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-engine</artifactId>
+        <version>5.8.2</version> <!-- Use the latest version -->
+        <scope>test</scope>
+    </dependency>
+
+    <!-- Mockito dependencies -->
+    <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <version>4.11.0</version> <!-- Use the latest version -->
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-junit-jupiter</artifactId>
+        <version>4.11.0</version> <!-- Use the latest version -->
+        <scope>test</scope>
+    </dependency>
+
+    <!-- Optional: If you are using Spring Boot, you might need this for additional Spring context testing support -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-test</artifactId>
+        <version>3.2.6</version> <!-- Use the version that matches your Spring Boot version -->
+        <scope>test</scope>
+    </dependency>
 
 
 		<dependency>
