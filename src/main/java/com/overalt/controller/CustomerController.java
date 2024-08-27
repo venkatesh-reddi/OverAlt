@@ -8,6 +8,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+<<<<<<< HEAD
+import com.overalt.exception.customer.CustomerNotFoundException;
+import com.overalt.exception.customer.InvalidCustomerDataException;
+=======
+>>>>>>> main
 import com.overalt.model.Customer;
 import com.overalt.repository.CustomerRepository;
 

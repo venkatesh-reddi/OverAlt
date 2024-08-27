@@ -1,14 +1,22 @@
 package com.overalt.controller;
 
-import java.time.LocalDateTime;
+//import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.overalt.exception.calldetails.CallDetailsNotFoundException;
+import com.overalt.exception.calldetails.InvalidCallDetailsException;
 import com.overalt.model.CallDetails;
 import com.overalt.repository.CallDetailsRepository;
 
@@ -22,6 +30,9 @@ public class CallDetailsController {
     // Create a new call detail record
     @PostMapping
     public ResponseEntity<CallDetails> createCallDetail(@RequestBody CallDetails callDetails) {
+        if(callDetails == null || callDetails.getCallerId() == null || callDetails.getReceiverId() == null){
+            throw new InvalidCallDetailsException("Call details data is invalid");
+        }
         callDetails.calculateCallDuration();
         CallDetails savedCallDetails = callDetailsRepository.save(callDetails);
         return new ResponseEntity<>(savedCallDetails, HttpStatus.CREATED);
@@ -30,9 +41,10 @@ public class CallDetailsController {
     // Get a call detail by ID
     @GetMapping("/{id}")
     public ResponseEntity<CallDetails> getCallDetailById(@PathVariable int id) {
-        Optional<CallDetails> callDetails = callDetailsRepository.findById(id);
-        return callDetails.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                          .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+       CallDetails callDetails = callDetailsRepository.findById(id).orElseThrow(() -> new CallDetailsNotFoundException(id));
+        return new ResponseEntity<>(callDetails, HttpStatus.OK);
+        // callDetails.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+        //                   .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     // Get all call details
@@ -56,9 +68,9 @@ public class CallDetailsController {
     // Update an existing call detail
     @PutMapping("/{id}")
     public ResponseEntity<CallDetails> updateCallDetail(@PathVariable int id, @RequestBody CallDetails callDetailsDetails) {
-        Optional<CallDetails> callDetailsOptional = callDetailsRepository.findById(id);
-        if (callDetailsOptional.isPresent()) {
-            CallDetails callDetails = callDetailsOptional.get();
+        CallDetails callDetails = callDetailsRepository.findById(id).orElseThrow(() -> new CallDetailsNotFoundException(id));
+        // if (callDetailsOptional.isPresent()) {
+        //     CallDetails callDetails = callDetails.get();
             callDetails.setCallerId(callDetailsDetails.getCallerId());
             callDetails.setReceiverId(callDetailsDetails.getReceiverId());
             callDetails.setCallStartTime(callDetailsDetails.getCallStartTime());
@@ -66,9 +78,9 @@ public class CallDetailsController {
             callDetails.calculateCallDuration();
             CallDetails updatedCallDetails = callDetailsRepository.save(callDetails);
             return new ResponseEntity<>(updatedCallDetails, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        // } else {
+        //     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        // }
     }
 
     // Delete a call detail record
