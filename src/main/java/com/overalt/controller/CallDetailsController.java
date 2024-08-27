@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.overalt.exception.calldetails.CallDetailsNotFoundException;
+import com.overalt.exception.CallDetailsNotFoundException;
 import com.overalt.exception.calldetails.InvalidCallDetailsException;
 import com.overalt.model.CallDetails;
 import com.overalt.repository.CallDetailsRepository;
@@ -41,7 +41,7 @@ public class CallDetailsController {
     // Get a call detail by ID
     @GetMapping("/{id}")
     public ResponseEntity<CallDetails> getCallDetailById(@PathVariable int id) {
-       CallDetails callDetails = callDetailsRepository.findById(id).orElseThrow(() -> new CallDetailsNotFoundException(id));
+       CallDetails callDetails = callDetailsRepository.findById(id).orElseThrow(() -> new com.overalt.exception.calldetails.CallDetailsNotFoundException(id));
         return new ResponseEntity<>(callDetails, HttpStatus.OK);
     }
 

@@ -1,7 +1,6 @@
 package com.overalt.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.overalt.exception.customer.CustomerNotFoundException;
+import com.overalt.exception.customer.InvalidCustomerDataException;
 import com.overalt.model.Customer;
 import com.overalt.repository.CustomerRepository;
 
@@ -31,6 +32,9 @@ public class CustomerController {
     // Create a new customer
     @PostMapping
     public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
+        if (customer == null || customer.getEmail() == null || customer.getFirstName() == null) {
+            throw new InvalidCustomerDataException("Customer data is invalid");
+        }
         Customer savedCustomer = customerRepository.save(customer);
         return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);
     }
@@ -38,9 +42,9 @@ public class CustomerController {
     // Get a customer by ID
     @GetMapping("/{id}")
     public ResponseEntity<Customer> getCustomerById(@PathVariable int id) {
-        Optional<Customer> customer = customerRepository.findByCustomerId(id);
-        return customer.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                       .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        Customer customer = customerRepository.findByCustomerId(id)
+                .orElseThrow(() -> new CustomerNotFoundException(id));
+        return new ResponseEntity<>(customer, HttpStatus.OK);
     }
 
     // Get all customers
@@ -52,22 +56,18 @@ public class CustomerController {
     // Update an existing customer
     @PutMapping("/{id}")
     public ResponseEntity<Customer> updateCustomer(@PathVariable int id, @RequestBody Customer customerDetails) {
-        Optional<Customer> customerOptional = customerRepository.findByCustomerId(id);
-        if (customerOptional.isPresent()) {
-            Customer customer = customerOptional.get();
-            customer.setFirstName(customerDetails.getFirstName());
-            customer.setLastName(customerDetails.getLastName());
-            customer.setPhoneNumber(customerDetails.getPhoneNumber());
-            customer.setEmail(customerDetails.getEmail());
-            customer.setAddress(customerDetails.getAddress());
-            customer.setPlan(customerDetails.getPlan());
-            customer.setCurrentFamilyCount(customerDetails.getCurrentFamilyCount());
-            customer.setCurrentFriendsCount(customerDetails.getCurrentFriendsCount());
-            Customer updatedCustomer = customerRepository.save(customer);
-            return new ResponseEntity<>(updatedCustomer, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        Customer customer = customerRepository.findByCustomerId(id)
+                .orElseThrow(() -> new CustomerNotFoundException(id));
+        customer.setFirstName(customerDetails.getFirstName());
+        customer.setLastName(customerDetails.getLastName());
+        customer.setPhoneNumber(customerDetails.getPhoneNumber());
+        customer.setEmail(customerDetails.getEmail());
+        customer.setAddress(customerDetails.getAddress());
+        customer.setPlan(customerDetails.getPlan());
+        customer.setCurrentFamilyCount(customerDetails.getCurrentFamilyCount());
+        customer.setCurrentFriendsCount(customerDetails.getCurrentFriendsCount());
+        Customer updatedCustomer = customerRepository.save(customer);
+        return new ResponseEntity<>(updatedCustomer, HttpStatus.OK);
     }
 
     // Delete a customer

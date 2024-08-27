@@ -8,6 +8,8 @@ import com.overalt.exception.calldetails.CallDetailsNotFoundException;
 import com.overalt.exception.calldetails.InvalidCallDetailsException;
 import com.overalt.exception.customer.CustomerNotFoundException;
 import com.overalt.exception.customer.InvalidCustomerDataException;
+import com.overalt.exception.friendorfamily.FriendOrFamilyNotFoundException;
+import com.overalt.exception.friendorfamily.InvalidFriendOrFamilyDataException;
 import com.overalt.exception.plan.InvalidPlanDataException;
 import com.overalt.exception.plan.PlanNotFoundException;
 
@@ -44,6 +46,17 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidPlanDataException.class)
     public ResponseEntity<String> handleInvalidPlanDataException(InvalidPlanDataException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    //FriendOrFamilyController
+    @ExceptionHandler(FriendOrFamilyNotFoundException.class)
+    public ResponseEntity<String> handleFriendOrFamilyNotFoundException(FriendOrFamilyNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(InvalidFriendOrFamilyDataException.class)
+    public ResponseEntity<String> handleInvalidFriendOrFamilyDataException(InvalidFriendOrFamilyDataException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
     
