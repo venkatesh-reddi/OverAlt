@@ -19,9 +19,6 @@ import com.overalt.exception.customer.InvalidCustomerDataException;
 import com.overalt.model.Customer;
 import com.overalt.repository.CustomerRepository;
 
-// import com.overalt.exception.customer.CustomerNotFoundException;
-// import com.overalt.exception.customer.InvalidCustomerDataException;
-
 @RestController
 @RequestMapping("/customers")
 public class CustomerController {
@@ -31,7 +28,7 @@ public class CustomerController {
 
     // Create a new customer
     @PostMapping
-    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
+    public ResponseEntity<Customer> createCustomer (@RequestBody Customer customer) {
         if (customer == null || customer.getEmail() == null || customer.getFirstName() == null) {
             throw new InvalidCustomerDataException("Customer data is invalid");
         }
