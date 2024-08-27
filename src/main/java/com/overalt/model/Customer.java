@@ -54,7 +54,8 @@ public class Customer {
     public Customer() {}
 
     // Constructor without customerId
-    public Customer(String firstName, String lastName, String phoneNumber, String email, String address, Plan plan, int currentFamilyCount, int currentFriendsCount) {
+    public Customer(int customerId, String firstName, String lastName, String phoneNumber, String email, String address, Plan plan, int currentFamilyCount, int currentFriendsCount) {
+        this.customerId = customerId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
