@@ -1,10 +1,8 @@
-
-
 function showAllCalls() {
     console.log('Showing all calls.');
     document.getElementById('filter-section').style.display = 'none';
     document.getElementById('table-container').style.display = 'block';
-    // Clear filter inputs
+    // Clear all filter inputs
     document.getElementById('callId').value = '';
     document.getElementById('callerId').value = '';
     document.getElementById('receiverId').value = '';
@@ -16,36 +14,58 @@ function showByCallId() {
     console.log('Showing calls by Call ID.');
     document.getElementById('filter-section').style.display = 'block';
     document.getElementById('table-container').style.display = 'block';
+    document.getElementById('cId').style.display = 'block';
+    document.getElementById('crId').style.display = 'none';
+    document.getElementById('rsId').style.display = 'none';
     // Set filters for Call ID
     document.getElementById('callId').style.display = 'block';
     document.getElementById('callerId').style.display = 'none';
     document.getElementById('receiverId').style.display = 'none';
     document.getElementById('callId').focus();
+    // Clear other filters
+    document.getElementById('callerId').value = '';
+    document.getElementById('receiverId').value = '';
+    // Fetch calls based on Call ID
+    fetchCalls();
 }
 
 function showByCallerId() {
     console.log('Showing calls by Caller ID.');
     document.getElementById('filter-section').style.display = 'block';
     document.getElementById('table-container').style.display = 'block';
+    document.getElementById('crId').style.display = 'block';
+    document.getElementById('cId').style.display = 'none';
+    document.getElementById('rsId').style.display = 'none';
     // Set filters for Caller ID
     document.getElementById('callId').style.display = 'none';
     document.getElementById('callerId').style.display = 'block';
     document.getElementById('receiverId').style.display = 'none';
     document.getElementById('callerId').focus();
-   
+    // Clear other filters
+    document.getElementById('callId').value = '';
+    document.getElementById('receiverId').value = '';
+    // Fetch calls based on Caller ID
+    fetchCalls();
 }
 
 function showByReceiverId() {
     console.log('Showing calls by Receiver ID.');
     document.getElementById('filter-section').style.display = 'block';
     document.getElementById('table-container').style.display = 'block';
+    document.getElementById('rsId').style.display = 'block';
+    document.getElementById('crId').style.display = 'none';
+    document.getElementById('cId').style.display = 'none';
     // Set filters for Receiver ID
     document.getElementById('callId').style.display = 'none';
     document.getElementById('callerId').style.display = 'none';
     document.getElementById('receiverId').style.display = 'block';
     document.getElementById('receiverId').focus();
+    // Clear other filters
+    document.getElementById('callId').value = '';
+    document.getElementById('callerId').value = '';
+    // Fetch calls based on Receiver ID
+    fetchCalls();
 }
-
 
 function fetchCalls() {
     const callId = document.getElementById('callId').value.trim();

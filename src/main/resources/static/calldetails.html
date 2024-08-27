@@ -100,14 +100,14 @@
         <a href="#" class="button" onclick="showByReceiverId()">Show by Receiver ID</a>
 
         <!-- Filter section for showing call details -->
-        <div id="filter-section" class="filter-container">
-            <label for="callId">Call ID:</label>
+        <div id="filter-section" class="filter-container" style="display: none;">
+            <label id="cId" for="callId">Call ID:</label>
             <input type="text" id="callId" placeholder="Enter Call ID">
         
-            <label for="callerId">Caller ID:</label>
+            <label id="crId" for="callerId">Caller ID:</label>
             <input type="text" id="callerId" placeholder="Enter Caller ID">
         
-            <label for="receiverId">Receiver ID:</label>
+            <label id="rsId" for="receiverId">Receiver ID:</label>
             <input type="text" id="receiverId" placeholder="Enter Receiver ID">
             
             <button class="button" onclick="fetchCalls()">Search</button>
