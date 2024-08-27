@@ -43,8 +43,6 @@ public class CallDetailsController {
     public ResponseEntity<CallDetails> getCallDetailById(@PathVariable int id) {
        CallDetails callDetails = callDetailsRepository.findById(id).orElseThrow(() -> new CallDetailsNotFoundException(id));
         return new ResponseEntity<>(callDetails, HttpStatus.OK);
-        // callDetails.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-        //                   .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     // Get all call details
