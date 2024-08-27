@@ -6,12 +6,21 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.overalt.exception.friendorfamily.FriendOrFamilyNotFoundException;
+import com.overalt.exception.friendorfamily.InvalidFriendOrFamilyDataException;
 import com.overalt.model.Customer;
 import com.overalt.model.FriendOrFamily;
-import com.overalt.repository.FriendOrFamilyRepository;
 import com.overalt.repository.CustomerRepository;
+import com.overalt.repository.FriendOrFamilyRepository;
 
 @RestController
 @RequestMapping("/friendorfamily")
@@ -26,6 +35,9 @@ public class FriendOrFamilyController {
     // Create a new friend or family member
     @PostMapping
     public ResponseEntity<FriendOrFamily> createFriendOrFamily(@RequestBody FriendOrFamily friendOrFamily) {
+        if (friendOrFamily == null || friendOrFamily.getContactNumber() <= 0) {
+            throw new InvalidFriendOrFamilyDataException("Friend or Family data is invalid. Contact number must be positive.");
+        }
         FriendOrFamily savedFriendOrFamily = friendOrFamilyRepository.save(friendOrFamily);
         return new ResponseEntity<>(savedFriendOrFamily, HttpStatus.CREATED);
     }
@@ -37,7 +49,7 @@ public class FriendOrFamilyController {
         if (friendOrFamily != null) {
             return new ResponseEntity<>(friendOrFamily, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new FriendOrFamilyNotFoundException(contactNumber);
         }
     }
 
@@ -58,12 +70,15 @@ public class FriendOrFamilyController {
     public ResponseEntity<FriendOrFamily> updateFriendOrFamily(@PathVariable long contactNumber, @RequestBody FriendOrFamily friendOrFamilyDetails) {
         FriendOrFamily friendOrFamily = friendOrFamilyRepository.findByContactNumber(contactNumber);
         if (friendOrFamily != null) {
+            if (friendOrFamilyDetails.getContactName() == null || friendOrFamilyDetails.getContactName().isEmpty()) {
+                throw new InvalidFriendOrFamilyDataException("Invalid data. Contact name cannot be null or empty.");
+            }
             friendOrFamily.setContactName(friendOrFamilyDetails.getContactName());
             friendOrFamily.setRelationshipType(friendOrFamilyDetails.getRelationshipType());
             FriendOrFamily updatedFriendOrFamily = friendOrFamilyRepository.save(friendOrFamily);
             return new ResponseEntity<>(updatedFriendOrFamily, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new FriendOrFamilyNotFoundException(contactNumber);
         }
     }
 

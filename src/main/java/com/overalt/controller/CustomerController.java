@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.overalt.Exception.Customer.CustomerNotFoundException;
-import com.overalt.Exception.Customer.InvalidCustomerDataException;
+import com.overalt.exception.customer.CustomerNotFoundException;
+import com.overalt.exception.customer.InvalidCustomerDataException;
 import com.overalt.model.Customer;
 import com.overalt.repository.CustomerRepository;
 
