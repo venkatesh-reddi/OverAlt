@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan Management</title>
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body onload="loadHeader()">
+
+    <!-- Header will be injected here -->
+    <header id="header"></header>
+
+    <div class="container">
+        <h1>Plan Management</h1>
+        <a href="#" class="button" onclick="showAllPlans()">Show All Plans</a>
+        <a href="#" class="button" onclick="showPlanById()">Show Plan by ID</a>
+        <a href="#" class="button" onclick="createPlan()">Create Plan</a>
+        <a href="#" class="button" onclick="updatePlan()">Update Plan</a>
+        <a href="#" class="button" onclick="deletePlan()">Delete Plan</a>
+
+        <!-- Filter section for showing or managing plan details -->
+        <div id="filter-section" class="filter-container" style="display: none;">
+            <label id="pId" for="planId" style="display: none;">Plan ID:</label>
+            <input type="text" id="planId" placeholder="Enter Plan ID">
+
+            <label id="pName" for="planName" style="display: none;">Plan Name:</label>
+            <input type="text" id="planName" placeholder="Enter Plan Name">
+
+            <label id="pCost" for="monthlyCost" style="display: none;">Monthly Cost:</label>
+            <input type="number" id="monthlyCost" placeholder="Enter Monthly Cost" step="0.01">
+
+            <label id="pDataLimit" for="dataLimit" style="display: none;">Data Limit (MB):</label>
+            <input type="number" id="dataLimit" placeholder="Enter Data Limit">
+
+            <label id="pCallMinutes" for="callMinutes" style="display: none;">Call Minutes:</label>
+            <input type="number" id="callMinutes" placeholder="Enter Call Minutes">
+
+            <label id="pMaxFamily" for="maxFamilyMembers" style="display: none;">Max Family Members:</label>
+            <input type="number" id="maxFamilyMembers" placeholder="Enter Max Family Members">
+
+            <label id="pMaxFriends" for="maxFriends" style="display: none;">Max Friends:</label>
+            <input type="number" id="maxFriends" placeholder="Enter Max Friends">
+
+            <button class="button" id="getbyid" onclick="showPlanById()" style="display: none;">Get</button>
+            <button class="button" id="submit" onclick="performAction()" style="display: none;">Submit</button>
+
+        </div>
+
+        <div id="table-container" class="table-container" style="display: none;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Plan ID</th>
+                        <th>Plan Name</th>
+                        <th>Monthly Cost</th>
+                        <th>Data Limit (GB)</th>
+                        <th>Call Minutes</th>
+                        <th>Max Family Members</th>
+                        <th>Max Friends</th>
+                    </tr>
+                </thead>
+                <tbody id="planTableBody">
+                    <!-- Plan rows will be dynamically inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="./js/script.js"></script>
+    <script src="./js/plans.js"></script>
+</body>
+</html>
