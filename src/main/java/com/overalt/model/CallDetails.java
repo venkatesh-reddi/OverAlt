@@ -89,4 +89,5 @@ public class CallDetails {
             this.callDuration = Duration.between(callStartTime, callEndTime).toMinutes();
         }
     }
+
 }
