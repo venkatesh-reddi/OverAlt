@@ -1,25 +1,32 @@
 package com.overalt.controller;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,11 +48,13 @@ public class CallDetailsControllerTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    @BeforeEach
+    public void setUp() {
+        mockMvc = MockMvcBuilders.standaloneSetup(callDetailsController).build();
+    }
+
     @Test
     void testCreateCallDetail() throws Exception {
-        // Initialize MockMvc
-        mockMvc = MockMvcBuilders.standaloneSetup(callDetailsController).build();
-
         // Prepare test data
         CallDetails callDetails = new CallDetails();
         callDetails.setCallId(1);
@@ -60,15 +69,13 @@ public class CallDetailsControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(callDetails)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.callId").value(1))
                 .andExpect(jsonPath("$.callerId").value(123))
                 .andExpect(jsonPath("$.receiverId").value(456));
     }
 
     @Test
     void testCreateCallDetail_Invalid() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(callDetailsController).build();
-
         mockMvc.perform(post("/calldetails")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{}"))
@@ -82,8 +89,6 @@ public class CallDetailsControllerTest {
 
     @Test
     void testGetCallDetailById() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(callDetailsController).build();
-
         CallDetails callDetails = new CallDetails();
         callDetails.setCallId(1);
         callDetails.setCallerId(123L);
@@ -95,15 +100,13 @@ public class CallDetailsControllerTest {
 
         mockMvc.perform(get("/calldetails/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.callId").value(1))
                 .andExpect(jsonPath("$.callerId").value(123))
                 .andExpect(jsonPath("$.receiverId").value(456));
     }
 
     @Test
     void testGetCallDetailById_NotFound() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(callDetailsController).build();
-
         when(callDetailsRepository.findById(anyInt())).thenReturn(Optional.empty());
 
         mockMvc.perform(get("/calldetails/1"))
@@ -117,8 +120,6 @@ public class CallDetailsControllerTest {
 
     @Test
     void testGetAllCallDetails() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(callDetailsController).build();
-
         CallDetails callDetails = new CallDetails();
         callDetails.setCallId(1);
         callDetails.setCallerId(123L);
@@ -132,15 +133,13 @@ public class CallDetailsControllerTest {
         mockMvc.perform(get("/calldetails"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].callId").value(1))
                 .andExpect(jsonPath("$[0].callerId").value(123))
                 .andExpect(jsonPath("$[0].receiverId").value(456));
     }
 
     @Test
     void testGetCallDetailsByCallerId() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(callDetailsController).build();
-
         CallDetails callDetails = new CallDetails();
         callDetails.setCallId(1);
         callDetails.setCallerId(123L);
@@ -154,15 +153,13 @@ public class CallDetailsControllerTest {
         mockMvc.perform(get("/calldetails/caller/123"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].callId").value(1))
                 .andExpect(jsonPath("$[0].callerId").value(123))
                 .andExpect(jsonPath("$[0].receiverId").value(456));
     }
 
     @Test
     void testGetCallDetailsByReceiverId() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(callDetailsController).build();
-
         CallDetails callDetails = new CallDetails();
         callDetails.setCallId(1);
         callDetails.setCallerId(123L);
@@ -176,15 +173,13 @@ public class CallDetailsControllerTest {
         mockMvc.perform(get("/calldetails/receiver/456"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].callId").value(1))
                 .andExpect(jsonPath("$[0].callerId").value(123))
                 .andExpect(jsonPath("$[0].receiverId").value(456));
     }
 
     @Test
     void testUpdateCallDetail() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(callDetailsController).build();
-
         CallDetails existingCallDetails = new CallDetails();
         existingCallDetails.setCallId(1);
         existingCallDetails.setCallerId(123L);
@@ -193,6 +188,7 @@ public class CallDetailsControllerTest {
         existingCallDetails.setCallEndTime(LocalDateTime.of(2024, 1, 1, 10, 30));
 
         CallDetails updatedDetails = new CallDetails();
+        updatedDetails.setCallId(1); // Ensure ID is set for update
         updatedDetails.setCallerId(123L);
         updatedDetails.setReceiverId(456L);
         updatedDetails.setCallStartTime(LocalDateTime.of(2024, 1, 1, 10, 0));
@@ -210,8 +206,6 @@ public class CallDetailsControllerTest {
 
     @Test
     void testUpdateCallDetail_NotFound() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(callDetailsController).build();
-
         CallDetails updatedDetails = new CallDetails();
         updatedDetails.setCallerId(123L);
         updatedDetails.setReceiverId(456L);
@@ -233,8 +227,6 @@ public class CallDetailsControllerTest {
 
     @Test
     void testDeleteCallDetail() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(callDetailsController).build();
-
         doNothing().when(callDetailsRepository).deleteById(anyInt());
 
         mockMvc.perform(delete("/calldetails/1"))
@@ -243,8 +235,6 @@ public class CallDetailsControllerTest {
 
     @Test
     void testDeleteCallDetail_InternalServerError() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(callDetailsController).build();
-
         doThrow(new RuntimeException()).when(callDetailsRepository).deleteById(anyInt());
 
         mockMvc.perform(delete("/calldetails/1"))
