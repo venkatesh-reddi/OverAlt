@@ -3,45 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customers</title>
+    <title>Customer Management</title>
     <link rel="stylesheet" href="./css/styles.css">
     <style>
         .form-container {
-            display: none; /* Initially hidden */
             margin-top: 20px;
-            text-align: left;
-            max-width: 500px;
-            margin: 20px auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        .form-container label {
-            display: block;
-            margin: 10px 0 5px;
-        }
-        .form-container input, .form-container select {
-            width: 100%;
-            padding: 8px;
+        .form-container input, .form-container label {
             margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            padding: 5px;
+            width: 100%;
+            max-width: 300px;
         }
         .form-container button {
-            display: inline-block;
-            padding: 10px 20px;
-            font-size: 16px;
-            color: white;
-            background-color: #28a745;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+            padding: 10px;
         }
-        .form-container button:hover {
-            background-color: #218838;
-        }
-
     </style>
 </head>
 <body onload="loadHeader()">
@@ -51,60 +30,61 @@
 
     <div class="container">
         <h1>Customer Management</h1>
-        <a href="#" class="button" onclick="showCreateForm()">Create Customer</a>
-        <a href="#" class="button" onclick="showReadSection()">Read Customer</a>
-        <a href="#" class="button" onclick="updateCustomer()">Update Customer</a>
-        <a href="#" class="button" onclick="deleteCustomer()">Delete Customer</a>
+        <button class="button" onclick="showAllCustomers()">Show All Customers</button>
+        <button class="button" onclick="showCustomerById()">Show Customer by ID</button>
+        <button class="button" onclick="showCreateForm()">Create Customer</button>
+        <button class="button" onclick="showUpdateForm()">Update Customer</button>
+        <button class="button" onclick="showDeleteForm()">Delete Customer</button>
 
-        <!-- Form for creating a new customer -->
-        <div id="create-form" class="form-container">
-            <h2>Create Customer</h2>
-            <form id="customerForm" onsubmit="submitForm(event)">
-                <label for="fname">First Name:</label>
-                <input type="text" id="fname" name="fname" required>
-
-                <label for="lname">Last Name:</label>
-                <input type="text" id="lname" name="lname" required>
-
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-
-                <label for="phone">Phone Number:</label>
-                <input type="tel" id="phone" name="phone" required>
-
-                <label for="address">Address:</label>
-                <input type="text" id="address" name="address" required>
-
-                <label for="plan">Plan:</label>
-                <select id="plan" name="plan" required>
-                    <option value="basic">Basic</option>
-                    <option value="standard">Standard</option>
-                    <option value="premium">Premium</option>
-                </select>
-
-                <button type="submit">Submit</button>
-            </form>
-        </div>
-
-        <!-- Filter and table section for reading customers -->
-        <div id="read-section" class="filter-container">
-            <h2>View Customers</h2>
-            <label for="customerId">Enter Customer ID (Leave blank to view all):</label>
-            <input type="text" id="customerId" placeholder="Customer ID">
+        <div id="filter-section" class="filter-container" style="display: none;">
+            <label id="customerIdLabel" for="customerId">Customer ID:</label>
+            <input type="text" id="customerId" placeholder="Enter Customer ID">
             <button class="button" onclick="fetchCustomers()">Search</button>
         </div>
 
-        <div id="table-container" class="table-container">
+        <div id="form-container" class="form-container" style="display: none;">
+            <form id="customerForm">
+                <input type="hidden" id="formType">
+
+                <div id="create-update-fields">
+                    <label for="cid">Customer Id:</label>
+                    <input type="text" id="cid">
+
+                    <label for="firstName">First Name:</label>
+                    <input type="text" id="firstName">
+
+                    <label for="lastName">Last Name:</label>
+                    <input type="text" id="lastName">
+
+                    <label for="phoneNumber">Phone Number:</label>
+                    <input type="text" id="phoneNumber">
+
+                    <label for="email">Email:</label>
+                    <input type="email" id="email">
+
+                    <label for="address">Address:</label>
+                    <input type="text" id="address">
+                </div>
+
+                <div id="delete-field" style="display: none;">
+                    <label for="deleteCid">Customer Id:</label>
+                    <input type="text" id="deleteCid">
+                </div>
+
+                <button type="submit" class="button">Submit</button>
+            </form>
+        </div>
+
+        <div id="table-container" class="table-container" style="display: block;">
             <table>
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>Customer ID</th>
                         <th>First Name</th>
                         <th>Last Name</th>
-                        <th>Email</th>
                         <th>Phone Number</th>
+                        <th>Email</th>
                         <th>Address</th>
-                        <th>Plan</th>
                     </tr>
                 </thead>
                 <tbody id="customerTableBody">

@@ -15,17 +15,17 @@
         <h1>Friend or Family Management</h1>
         <a href="#" class="button" onclick="showContactByNumber()">Show by Phone Number</a>
         <a href="#" class="button" onclick="showContactById()">Show by ID</a>
-        <a href="#" class="button" onclick="addContact()">Add </a>
-        <a href="#" class="button" onclick="updateContact()">Update </a>
-        <a href="#" class="button" onclick="deleteContact()">Delete </a>
+        <a href="#" class="button" onclick="addContact()">Add</a>
+        <a href="#" class="button" onclick="updateContact()">Update</a>
+        <a href="#" class="button" onclick="deleteContact()">Delete</a>
 
         <!-- Filter section for showing or managing contact details -->
         <div id="filter-section" class="filter-container" style="display: none;">
             <label id="cNumber" for="contactNumber" style="display: none;">Contact Number:</label>
             <input type="text" id="contactNumber" placeholder="Enter Contact Number">
 
-            <label id="cId" for="contactId" style="display: none;">Customer ID:</label>
-            <input type="text" id="contactId" placeholder="Enter Contact ID">
+            <label id="cId" for="customerId" style="display: none;">Customer ID:</label>
+            <input type="text" id="customerId" placeholder="Enter Customer ID">
 
             <label id="cName" for="contactName" style="display: none;">Name:</label>
             <input type="text" id="contactName" placeholder="Enter Contact Name">
@@ -52,7 +52,6 @@
                     <!-- Contact rows will be dynamically inserted here -->
                 </tbody>
             </table>
-            
         </div>
     </div>
 
