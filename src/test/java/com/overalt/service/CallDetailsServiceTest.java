@@ -1,24 +1,27 @@
 package com.overalt.service;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.overalt.model.CallDetails;
 import com.overalt.repository.CallDetailsRepository;
 
-@DataJpaTest
+@ExtendWith(MockitoExtension.class)
 public class CallDetailsServiceTest {
 
     @InjectMocks
@@ -29,7 +32,7 @@ public class CallDetailsServiceTest {
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
+        // MockitoAnnotations.openMocks(this); // No longer needed with @ExtendWith(MockitoExtension.class)
     }
 
     @Test
@@ -42,7 +45,7 @@ public class CallDetailsServiceTest {
         callDetails.setCallEndTime(LocalDateTime.now());
         callDetails.calculateCallDuration();
         
-        when(callDetailsRepository.save(callDetails)).thenReturn(callDetails);
+        when(callDetailsRepository.save(any(CallDetails.class))).thenReturn(callDetails);
 
         CallDetails savedCallDetails = callDetailsService.saveCallDetails(callDetails);
         assertThat(savedCallDetails).isNotNull();
