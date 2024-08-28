@@ -1,13 +1,8 @@
-// Function to show contact details by contact number
-let showByC =0;
-let showById =0;
-let add=0;
-let up=0;
-let del=0;
-
+// Global state variables
+let action = ''; // Can be 'showByNumber', 'showById', 'add', 'update', 'delete'
 
 function showContactByNumber() {
-    showByC=1;
+    action = 'showByNumber';
     console.log('Executing showContactByNumber function.');
     document.getElementById('filter-section').style.display = 'block';
     document.getElementById('table-container').style.display = 'block';
@@ -19,15 +14,15 @@ function showContactByNumber() {
     console.log('Showing Contact Number filter.');
     document.getElementById('cNumber').style.display = 'block';
     document.getElementById('contactNumber').style.display = 'block';
-    document.getElementById('contactId').style.display = 'none';
+    document.getElementById('cId').style.display = 'none';
+    document.getElementById('customerId').style.display = 'none';
     document.getElementById('contactName').style.display = 'none';
     document.getElementById('relationship').style.display = 'none';
     document.getElementById('contactNumber').focus();
 }
 
-// Function to show contact details by contact ID
 function showContactById() {
-    showById=1;
+    action = 'showById';
     console.log('Executing showContactById function.');
     document.getElementById('filter-section').style.display = 'block';
     document.getElementById('table-container').style.display = 'block';
@@ -38,16 +33,16 @@ function showContactById() {
     // Show only Contact ID filter
     console.log('Showing Contact ID filter.');
     document.getElementById('cId').style.display = 'block';
-    document.getElementById('contactId').style.display = 'block';
+    document.getElementById('customerId').style.display = 'block';
+    document.getElementById('cNumber').style.display = 'none';
     document.getElementById('contactNumber').style.display = 'none';
     document.getElementById('contactName').style.display = 'none';
     document.getElementById('relationship').style.display = 'none';
-    document.getElementById('contactId').focus();
+    document.getElementById('customerId').focus();
 }
 
-// Function to add a new contact
 function addContact() {
-    add=1;
+    action = 'add';
     console.log('Executing addContact function.');
     document.getElementById('filter-section').style.display = 'block';
     document.getElementById('table-container').style.display = 'none';
@@ -58,14 +53,13 @@ function addContact() {
     // Show form fields for adding a new contact
     console.log('Displaying form fields for adding a new contact.');
     document.getElementById('contactNumber').style.display = 'block';
-    document.getElementById('contactId').style.display = 'none';
+    document.getElementById('customerId').style.display = 'block';
     document.getElementById('contactName').style.display = 'block';
     document.getElementById('relationship').style.display = 'block';
 }
 
-// Function to update an existing contact
 function updateContact() {
-    up=1;
+    action = 'update';
     console.log('Executing updateContact function.');
     document.getElementById('filter-section').style.display = 'block';
     document.getElementById('table-container').style.display = 'none';
@@ -76,14 +70,13 @@ function updateContact() {
     // Show form fields for updating an existing contact
     console.log('Displaying form fields for updating contact.');
     document.getElementById('contactNumber').style.display = 'block';
-    document.getElementById('contactId').style.display = 'block';
+    document.getElementById('customerId').style.display = 'block';
     document.getElementById('contactName').style.display = 'block';
     document.getElementById('relationship').style.display = 'block';
 }
 
-// Function to delete a contact
 function deleteContact() {
-    del=1;
+    action = 'delete';
     console.log('Executing deleteContact function.');
     document.getElementById('filter-section').style.display = 'block';
     document.getElementById('table-container').style.display = 'none';
@@ -94,34 +87,28 @@ function deleteContact() {
     // Show only Contact Number or ID filter for deletion
     console.log('Displaying Contact Number or ID filter for deletion.');
     document.getElementById('contactNumber').style.display = 'block';
-    document.getElementById('contactId').style.display = 'block';
+    document.getElementById('customerId').style.display = 'none';
     document.getElementById('contactName').style.display = 'none';
     document.getElementById('relationship').style.display = 'none';
 }
 
-// Function to perform actions based on the current form state
 function performAction() {
     console.log('Executing performAction function.');
 
     const contactNumber = document.getElementById('contactNumber').value.trim();
-    const contactId = document.getElementById('contactId').value.trim();
+    const customerId = document.getElementById('customerId').value.trim();
     const contactName = document.getElementById('contactName').value.trim();
-    const relationship = document.getElementById('relationship').value.trim();
+    const relationshipType = document.getElementById('relationship').value.trim(); // Renamed to match required format
 
-    console.log('Form values:', {
-        contactNumber,
-        contactId,
-        contactName,
-        relationship
-    });
+    console.log('Form values:', { contactNumber, customerId, contactName, relationshipType });
 
-    if (add==1 && contactNumber && document.getElementById('contactName').style.display === 'block') {
+    if (action === 'add' && contactNumber && contactName && customerId && relationshipType) {
         // Add Contact
         console.log('Adding new contact.');
         fetch('http://localhost:1000/friendorfamily', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ contactNumber, contactName, relationship })
+            body: JSON.stringify({ customerId, contactNumber, contactName, relationshipType })
         })
         .then(response => {
             if (!response.ok) {
@@ -131,17 +118,16 @@ function performAction() {
         })
         .then(data => {
             console.log('Contact added:', data);
-            document.getElementById('table-container').style.display = 'block';
             fetchContacts(); // Refresh the list of contacts
         })
         .catch(error => console.error('Error adding contact:', error));
-    } else if (up==1 && contactId && document.getElementById('contactName').style.display === 'block') {
+    } else if (action === 'update' && customerId && contactNumber && contactName && relationshipType) {
         // Update Contact
         console.log('Updating contact.');
-        fetch(`http://localhost:1000/friendorfamily/${contactId}`, {
+        fetch(`http://localhost:1000/friendorfamily/${customerId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ contactNumber, contactName, relationship })
+            body: JSON.stringify({ contactNumber, contactName, relationshipType })
         })
         .then(response => {
             if (!response.ok) {
@@ -151,11 +137,10 @@ function performAction() {
         })
         .then(data => {
             console.log('Contact updated:', data);
-            document.getElementById('table-container').style.display = 'block';
             fetchContacts(); // Refresh the list of contacts
         })
         .catch(error => console.error('Error updating contact:', error));
-    } else if (del==1 && contactNumber && !contactId) {
+    } else if (action === 'delete' && contactNumber) {
         // Delete Contact
         console.log('Deleting contact.');
         fetch(`http://localhost:1000/friendorfamily/${contactNumber}`, {
@@ -166,11 +151,10 @@ function performAction() {
                 throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
             }
             console.log('Contact deleted.');
-            document.getElementById('table-container').style.display = 'block';
             fetchContacts(); // Refresh the list of contacts
         })
         .catch(error => console.error('Error deleting contact:', error));
-    } else if (showByC==1 && contactNumber) {
+    } else if (action === 'showByNumber' && contactNumber) {
         // Show Contact by Number
         console.log('Showing contact by number.');
         fetch(`http://localhost:1000/friendorfamily/${contactNumber}`)
@@ -184,10 +168,10 @@ function performAction() {
             displayContacts(data);
         })
         .catch(error => console.error('Error fetching contact by number:', error));
-    } else if (showById==1 && contactId) {
+    } else if (action === 'showById' && customerId) {
         // Show Contact by ID
         console.log('Showing contact by ID.');
-        fetch(`http://localhost:1000/friendorfamily/customer/${contactId}`)
+        fetch(`http://localhost:1000/friendorfamily/customer/${customerId}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
@@ -203,25 +187,29 @@ function performAction() {
     }
 }
 
-// Function to display contacts in the table
-function displayContacts(contact) {
-    console.log('Executing displayContact function.');
+
+function displayContacts(data) {
+    console.log('Executing displayContacts function.');
 
     const tableBody = document.getElementById('contactTableBody');
     tableBody.innerHTML = '';
 
-    // Ensure contact is an object
-    if (contact && typeof contact === 'object') {
-        console.log('Inserting contact into table:', contact);
+    // Handle cases for both arrays and single objects
+    const contacts = Array.isArray(data) ? data : [data];
 
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${contact.customer}</td>
-            <td>${contact.contactNumber}</td>
-            <td>${contact.contactName}</td>
-            <td>${contact.relationshipType}</td>
-        `;
-        tableBody.appendChild(row);
+    if (contacts.length > 0) {
+        contacts.forEach(contact => {
+            console.log('Inserting contact into table:', contact);
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${contact.customerId || 'N/A'}</td>
+                <td>${contact.contactNumber || 'N/A'}</td>
+                <td>${contact.contactName || 'N/A'}</td>
+                <td>${contact.relationshipType || 'N/A'}</td>
+            `;
+            tableBody.appendChild(row);
+        });
     } else {
         console.log('No data found to display.');
 
@@ -232,8 +220,6 @@ function displayContacts(contact) {
 }
 
 
-
-// Function to fetch and display all contacts (used to refresh table)
 function fetchContacts() {
     console.log('Fetching all contacts.');
     fetch('http://localhost:1000/friendorfamily')
@@ -248,5 +234,3 @@ function fetchContacts() {
     })
     .catch(error => console.error('Error fetching contacts:', error));
 }
-
-
