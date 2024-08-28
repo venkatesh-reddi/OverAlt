@@ -1,4 +1,4 @@
-package com.overalt.exception.friendorfamily;
+package com.overalt.exception.plan;
 
 public class PlanNotFoundException extends RuntimeException{
     public PlanNotFoundException(int id) {
