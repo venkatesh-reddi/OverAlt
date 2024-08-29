@@ -87,7 +87,7 @@ public class PlanControllerTest {
     @Test
     void testGetPlanById() throws Exception {
         Plan plan = new Plan();
-        plan.setPlanId(1);
+        plan.setPlanId(4);
         plan.setPlanName("Basic Plan");
         plan.setMaxFamilyMembers(4);
         plan.setMaxFriends(10);
@@ -111,7 +111,7 @@ public class PlanControllerTest {
                 .andExpect(result -> {
                     assertThat(result.getResolvedException())
                         .isInstanceOf(PlanNotFoundException.class)
-                        .hasMessage("Plan with ID 1 not found");
+                        .hasMessage("Plan with ID 4 not found");
                 });
     }
 
@@ -172,7 +172,7 @@ public class PlanControllerTest {
     @Test
     void testUpdatePlan_NotFound() throws Exception {
         Plan updatedPlan = new Plan();
-        updatedPlan.setPlanId(1);
+        updatedPlan.setPlanId(4);
         updatedPlan.setPlanName("Updated Plan");
         updatedPlan.setMaxFamilyMembers(5);
         updatedPlan.setMaxFriends(15);
@@ -186,7 +186,7 @@ public class PlanControllerTest {
                 .andExpect(result -> {
                     assertThat(result.getResolvedException())
                         .isInstanceOf(PlanNotFoundException.class)
-                        .hasMessage("Plan with ID 1 not found");
+                        .hasMessage("Plan with ID 4 not found");
                 });
     }
 
