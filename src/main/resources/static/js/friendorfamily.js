@@ -1,236 +1,178 @@
-// Global state variables
-let action = ''; // Can be 'showByNumber', 'showById', 'add', 'update', 'delete'
-
-function showContactByNumber() {
-    action = 'showByNumber';
-    console.log('Executing showContactByNumber function.');
+function showByPhoneNumber() {
+    console.log('Showing contact by phone number.');
     document.getElementById('filter-section').style.display = 'block';
-    document.getElementById('table-container').style.display = 'block';
-    document.getElementById('getbycontact').style.display = 'block';
-    document.getElementById('getbyid').style.display = 'none';
-    document.getElementById('submit').style.display = 'none';
-
-    // Show only Contact Number filter
-    console.log('Showing Contact Number filter.');
-    document.getElementById('cNumber').style.display = 'block';
+    document.getElementById('form-container').style.display = 'none';
+    document.getElementById('table-container').style.display = 'none';
     document.getElementById('contactNumber').style.display = 'block';
-    document.getElementById('cId').style.display = 'none';
-    document.getElementById('customerId').style.display = 'none';
-    document.getElementById('contactName').style.display = 'none';
-    document.getElementById('relationship').style.display = 'none';
+    document.getElementById('contactNumberLabel').style.display = 'block';
+    document.getElementById('cid').style.display = 'none';
+    document.getElementById('cidLabel').style.display = 'none';
     document.getElementById('contactNumber').focus();
+    console.log('Contact Number input is now visible and focused.');
+     // Fetch contacts to populate the table
 }
 
-function showContactById() {
-    action = 'showById';
-    console.log('Executing showContactById function.');
-    document.getElementById('filter-section').style.display = 'block';
-    document.getElementById('table-container').style.display = 'block';
-    document.getElementById('getbyid').style.display = 'block';
-    document.getElementById('getbycontact').style.display = 'none';
-    document.getElementById('submit').style.display = 'none';
 
-    // Show only Contact ID filter
-    console.log('Showing Contact ID filter.');
-    document.getElementById('cId').style.display = 'block';
-    document.getElementById('customerId').style.display = 'block';
-    document.getElementById('cNumber').style.display = 'none';
+function showById() {
+    console.log('Showing contact by ID.');
+    document.getElementById('filter-section').style.display = 'block';
+    document.getElementById('form-container').style.display = 'none';
+    document.getElementById('table-container').style.display = 'none';
     document.getElementById('contactNumber').style.display = 'none';
-    document.getElementById('contactName').style.display = 'none';
-    document.getElementById('relationship').style.display = 'none';
-    document.getElementById('customerId').focus();
+    document.getElementById('contactNumberLabel').style.display = 'none';
+    document.getElementById('cidLabel').style.display = 'block';
+    document.getElementById('cid').style.display = 'block'; // Show Customer ID input
+    document.getElementById('cid').focus();
+    console.log('Customer ID input is now visible and focused.');
 }
 
-function addContact() {
-    action = 'add';
-    console.log('Executing addContact function.');
-    document.getElementById('filter-section').style.display = 'block';
+function showCreateForm() {
+    console.log('Displaying form to add a contact.');
+    document.getElementById('filter-section').style.display = 'none';
     document.getElementById('table-container').style.display = 'none';
-    document.getElementById('submit').style.display = 'block';
-    document.getElementById('getbycontact').style.display = 'none';
-    document.getElementById('getbyid').style.display = 'none';
-
-    // Show form fields for adding a new contact
-    console.log('Displaying form fields for adding a new contact.');
-    document.getElementById('contactNumber').style.display = 'block';
-    document.getElementById('customerId').style.display = 'block';
-    document.getElementById('contactName').style.display = 'block';
-    document.getElementById('relationship').style.display = 'block';
+    document.getElementById('form-container').style.display = 'block';
+    document.getElementById('contactForm').reset();
+    document.getElementById('formType').value = 'create';
+    document.getElementById('create-update-fields').style.display = 'block';
+    document.getElementById('delete-field').style.display = 'none'; // Hide delete field
+    console.log('Form type set to "create" and all fields visible.');
 }
 
-function updateContact() {
-    action = 'update';
-    console.log('Executing updateContact function.');
-    document.getElementById('filter-section').style.display = 'block';
+function showUpdateForm() {
+    console.log('Displaying form to update a contact.');
+    document.getElementById('filter-section').style.display = 'none';
     document.getElementById('table-container').style.display = 'none';
-    document.getElementById('submit').style.display = 'block';
-    document.getElementById('getbycontact').style.display = 'none';
-    document.getElementById('getbyid').style.display = 'none';
-
-    // Show form fields for updating an existing contact
-    console.log('Displaying form fields for updating contact.');
-    document.getElementById('contactNumber').style.display = 'block';
-    document.getElementById('customerId').style.display = 'block';
-    document.getElementById('contactName').style.display = 'block';
-    document.getElementById('relationship').style.display = 'block';
-}
-
-function deleteContact() {
-    action = 'delete';
-    console.log('Executing deleteContact function.');
-    document.getElementById('filter-section').style.display = 'block';
-    document.getElementById('table-container').style.display = 'none';
-    document.getElementById('submit').style.display = 'block';
-    document.getElementById('getbycontact').style.display = 'none';
-    document.getElementById('getbyid').style.display = 'none';
-
-    // Show only Contact Number or ID filter for deletion
-    console.log('Displaying Contact Number or ID filter for deletion.');
-    document.getElementById('contactNumber').style.display = 'block';
+    document.getElementById('form-container').style.display = 'block';
     document.getElementById('customerId').style.display = 'none';
-    document.getElementById('contactName').style.display = 'none';
-    document.getElementById('relationship').style.display = 'none';
+    document.getElementById('cusIdLabel').style.display = 'none';
+    document.getElementById('contactForm').reset();
+    document.getElementById('formType').value = 'update';
+    document.getElementById('create-update-fields').style.display = 'block';
+    document.getElementById('delete-field').style.display = 'none'; // Hide delete field
+    console.log('Form type set to "update" and all fields visible.');
 }
 
-function performAction() {
-    console.log('Executing performAction function.');
-
-    const contactNumber = document.getElementById('contactNumber').value.trim();
-    const customerId = document.getElementById('customerId').value.trim();
-    const contactName = document.getElementById('contactName').value.trim();
-    const relationshipType = document.getElementById('relationship').value.trim(); // Renamed to match required format
-
-    console.log('Form values:', { contactNumber, customerId, contactName, relationshipType });
-
-    if (action === 'add' && contactNumber && contactName && customerId && relationshipType) {
-        // Add Contact
-        console.log('Adding new contact.');
-        fetch('http://localhost:1000/friendorfamily', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ customerId, contactNumber, contactName, relationshipType })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Contact added:', data);
-            fetchContacts(); // Refresh the list of contacts
-        })
-        .catch(error => console.error('Error adding contact:', error));
-    } else if (action === 'update' && customerId && contactNumber && contactName && relationshipType) {
-        // Update Contact
-        console.log('Updating contact.');
-        fetch(`http://localhost:1000/friendorfamily/${customerId}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ contactNumber, contactName, relationshipType })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Contact updated:', data);
-            fetchContacts(); // Refresh the list of contacts
-        })
-        .catch(error => console.error('Error updating contact:', error));
-    } else if (action === 'delete' && contactNumber) {
-        // Delete Contact
-        console.log('Deleting contact.');
-        fetch(`http://localhost:1000/friendorfamily/${contactNumber}`, {
-            method: 'DELETE'
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
-            }
-            console.log('Contact deleted.');
-            fetchContacts(); // Refresh the list of contacts
-        })
-        .catch(error => console.error('Error deleting contact:', error));
-    } else if (action === 'showByNumber' && contactNumber) {
-        // Show Contact by Number
-        console.log('Showing contact by number.');
-        fetch(`http://localhost:1000/friendorfamily/${contactNumber}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            displayContacts(data);
-        })
-        .catch(error => console.error('Error fetching contact by number:', error));
-    } else if (action === 'showById' && customerId) {
-        // Show Contact by ID
-        console.log('Showing contact by ID.');
-        fetch(`http://localhost:1000/friendorfamily/customer/${customerId}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            displayContacts(data);
-        })
-        .catch(error => console.error('Error fetching contact by ID:', error));
-    } else {
-        console.log('Invalid form state.');
-    }
+function showDeleteForm() {
+    console.log('Displaying form to delete a contact.');
+    document.getElementById('filter-section').style.display = 'none';
+    document.getElementById('table-container').style.display = 'none';
+    document.getElementById('form-container').style.display = 'block';
+    document.getElementById('contactForm').reset();
+    document.getElementById('formType').value = 'delete';
+    document.getElementById('create-update-fields').style.display = 'none'; // Hide create/update fields
+    document.getElementById('delete-field').style.display = 'block'; // Show delete field
+    console.log('Form type set to "delete" and delete field visible.');
 }
-
-
-function displayContacts(data) {
-    console.log('Executing displayContacts function.');
-
-    const tableBody = document.getElementById('contactTableBody');
-    tableBody.innerHTML = '';
-
-    // Handle cases for both arrays and single objects
-    const contacts = Array.isArray(data) ? data : [data];
-
-    if (contacts.length > 0) {
-        contacts.forEach(contact => {
-            console.log('Inserting contact into table:', contact);
-
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${contact.customerId || 'N/A'}</td>
-                <td>${contact.contactNumber || 'N/A'}</td>
-                <td>${contact.contactName || 'N/A'}</td>
-                <td>${contact.relationshipType || 'N/A'}</td>
-            `;
-            tableBody.appendChild(row);
-        });
-    } else {
-        console.log('No data found to display.');
-
-        const row = document.createElement('tr');
-        row.innerHTML = '<td colspan="4">No contact details found</td>';
-        tableBody.appendChild(row);
-    }
-}
-
 
 function fetchContacts() {
-    console.log('Fetching all contacts.');
-    fetch('http://localhost:1000/friendorfamily')
+    const contactNumber = document.getElementById('contactNumber').value.trim();
+    const customerId = document.getElementById('cid').value.trim();
+    document.getElementById('table-container').style.display = 'block';
+    let url = '';
+
+    // Determine URL based on input
+    if (contactNumber && !customerId) {
+        url = `http://localhost:1000/friendorfamily/${contactNumber}`;
+        console.log(`Fetching contact with Phone Number ${contactNumber}`);
+    } else if (customerId) {
+        url = `http://localhost:1000/friendorfamily/customer/${customerId}`;
+        console.log(`Fetching contacts for Customer ID ${customerId}`);
+    } else {
+        console.error('No contact number or customer ID provided.');
+        return;
+    }
+
+    // Fetch contacts from server
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                console.error('Network response was not ok:', response.statusText);
+                throw new Error('Network response was not ok.');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Data received:', data);
+
+            // Clear previous results
+            const tableBody = document.getElementById('contactTableBody');
+            tableBody.innerHTML = '';
+
+            // Ensure data is treated as an array
+            const contacts = Array.isArray(data) ? data : [data];
+
+            if (contacts.length > 0) {
+                contacts.forEach(contact => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = 
+                        `<td>${contact.contactNumber}</td>
+                         <td>${contact.contactName}</td>
+                         <td>${contact.relationshipType}</td>`;
+                    tableBody.appendChild(row);
+                });
+            } else {
+                const row = document.createElement('tr');
+                row.innerHTML = '<td colspan="3">No contacts found</td>';
+                tableBody.appendChild(row);
+            }
+        })
+        .catch(error => console.error('Error fetching contact details:', error));
+}
+
+
+
+document.getElementById('contactForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const formType = document.getElementById('formType').value;
+    const customerId = document.getElementById('customerId').value.trim();
+    const contactNumber = document.getElementById('contactNumberInput').value.trim();
+    const deleteContactNumber = document.getElementById('deleteContactNumber').value.trim();
+    const contactData = {
+        contactName: document.getElementById('contactName').value.trim(),
+        contactNumber: document.getElementById('contactNumberInput').value.trim(),
+        relationshipType: document.getElementById('relationshipType').value.trim()
+    };
+
+    console.log(`Form Type: ${formType}`);
+    console.log(`Contact Number: ${contactNumber}`);
+    console.log(`Delete Contact Number: ${deleteContactNumber}`);
+    console.log('Contact Data:', contactData);
+
+    let method, url;
+
+    switch (formType) {
+        case 'create':
+            method = 'POST';
+            url = 'http://localhost:1000/friendorfamily';
+            break;
+        case 'update':
+            method = 'PUT';
+            url = `http://localhost:1000/friendorfamily/${contactNumber}`;
+            break;
+        case 'delete':
+            method = 'DELETE';
+            url = `http://localhost:1000/friendorfamily/${deleteContactNumber}`;
+            break;
+        default:
+            alert('Invalid form type');
+            return;
+    }
+
+    fetch(url, {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: method !== 'DELETE' ? JSON.stringify(contactData) : undefined
+    })
     .then(response => {
         if (!response.ok) {
-            throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
+            console.error('Network response was not ok:', response.statusText);
+            throw new Error('Network response was not ok.');
         }
-        return response.json();
+        alert(`Contact ${formType}d successfully!`);
+         // Refresh the contact list
     })
-    .then(data => {
-        displayContacts(data);
-    })
-    .catch(error => console.error('Error fetching contacts:', error));
-}
+    .catch(error => console.error(`Error ${formType}ing contact:`, error));
+});
