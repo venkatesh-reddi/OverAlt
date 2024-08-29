@@ -1,24 +1,30 @@
 package com.overalt.controller;
 
-import static org.assertj.core.api.Java6Assertions.*;
-import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,10 +46,13 @@ public class CustomerControllerTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    @BeforeEach
+    public void setUp() {
+        mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
+    }
+
     @Test
     void testCreateCustomer() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
-
         Customer customer = new Customer();
         customer.setCustomerId(1);
         customer.setFirstName("John");
@@ -56,17 +65,14 @@ public class CustomerControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(customer)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.customerId").value(1))
                 .andExpect(jsonPath("$.firstName").value("John"))
                 .andExpect(jsonPath("$.lastName").value("Doe"))
                 .andExpect(jsonPath("$.email").value("john.doe@example.com"));
     }
 
-    @SuppressWarnings("deprecation")
     @Test
     void testCreateCustomer_Invalid() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
-
         mockMvc.perform(post("/customers")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{}"))
@@ -80,8 +86,6 @@ public class CustomerControllerTest {
 
     @Test
     void testGetCustomerById() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
-
         Customer customer = new Customer();
         customer.setCustomerId(1);
         customer.setFirstName("John");
@@ -92,17 +96,14 @@ public class CustomerControllerTest {
 
         mockMvc.perform(get("/customers/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.customerId").value(1))
                 .andExpect(jsonPath("$.firstName").value("John"))
                 .andExpect(jsonPath("$.lastName").value("Doe"))
                 .andExpect(jsonPath("$.email").value("john.doe@example.com"));
     }
 
-    @SuppressWarnings("deprecation")
     @Test
     void testGetCustomerById_NotFound() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
-
         when(customerRepository.findByCustomerId(anyInt())).thenReturn(Optional.empty());
 
         mockMvc.perform(get("/customers/1"))
@@ -116,8 +117,6 @@ public class CustomerControllerTest {
 
     @Test
     void testGetAllCustomers() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
-
         Customer customer = new Customer();
         customer.setCustomerId(1);
         customer.setFirstName("John");
@@ -130,7 +129,7 @@ public class CustomerControllerTest {
         mockMvc.perform(get("/customers"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].customerId").value(1))
                 .andExpect(jsonPath("$[0].firstName").value("John"))
                 .andExpect(jsonPath("$[0].lastName").value("Doe"))
                 .andExpect(jsonPath("$[0].email").value("john.doe@example.com"));
@@ -138,8 +137,6 @@ public class CustomerControllerTest {
 
     @Test
     void testUpdateCustomer() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
-
         Customer existingCustomer = new Customer();
         existingCustomer.setCustomerId(1);
         existingCustomer.setFirstName("John");
@@ -147,6 +144,7 @@ public class CustomerControllerTest {
         existingCustomer.setEmail("john.doe@example.com");
 
         Customer updatedCustomer = new Customer();
+        updatedCustomer.setCustomerId(1); // Ensure ID is set for update
         updatedCustomer.setFirstName("Jane");
         updatedCustomer.setLastName("Doe");
         updatedCustomer.setEmail("jane.doe@example.com");
@@ -163,11 +161,8 @@ public class CustomerControllerTest {
                 .andExpect(jsonPath("$.email").value("jane.doe@example.com"));
     }
 
-    @SuppressWarnings("deprecation")
     @Test
     void testUpdateCustomer_NotFound() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
-
         Customer updatedCustomer = new Customer();
         updatedCustomer.setFirstName("Jane");
         updatedCustomer.setLastName("Doe");
@@ -188,8 +183,6 @@ public class CustomerControllerTest {
 
     @Test
     void testDeleteCustomer() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
-
         doNothing().when(customerRepository).deleteById(anyInt());
 
         mockMvc.perform(delete("/customers/1"))
@@ -198,8 +191,6 @@ public class CustomerControllerTest {
 
     @Test
     void testDeleteCustomer_InternalServerError() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
-
         doThrow(new RuntimeException()).when(customerRepository).deleteById(anyInt());
 
         mockMvc.perform(delete("/customers/1"))

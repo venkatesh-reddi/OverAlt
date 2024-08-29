@@ -1,24 +1,26 @@
 package com.overalt.service;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
-
 import java.util.Arrays;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.overalt.model.Customer;
 import com.overalt.model.FriendOrFamily;
 import com.overalt.repository.FriendOrFamilyRepository;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class FriendOrFamilyServiceTest {
 
     @Mock
@@ -32,7 +34,6 @@ public class FriendOrFamilyServiceTest {
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
         customer = new Customer(1, "John", "Doe", "1234567890", "john.doe@example.com", "123 Main St", null, 2, 3);
         friendOrFamily = new FriendOrFamily(customer, 9876543210L, "Jane Doe", "Sister");
     }

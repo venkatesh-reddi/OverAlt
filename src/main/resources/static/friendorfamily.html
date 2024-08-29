@@ -3,8 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Friend or Family Management</title>
+    <title>Friends or Family Management</title>
     <link rel="stylesheet" href="./css/styles.css">
+    <style>
+        .form-container {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .form-container input, .form-container label {
+            margin-bottom: 10px;
+            padding: 5px;
+            width: 100%;
+            max-width: 300px;
+        }
+        .form-container button {
+            padding: 10px;
+        }
+    </style>
 </head>
 <body onload="loadHeader()">
 
@@ -12,37 +29,53 @@
     <header id="header"></header>
 
     <div class="container">
-        <h1>Friend or Family Management</h1>
-        <a href="#" class="button" onclick="showContactByNumber()">Show by Phone Number</a>
-        <a href="#" class="button" onclick="showContactById()">Show by ID</a>
-        <a href="#" class="button" onclick="addContact()">Add </a>
-        <a href="#" class="button" onclick="updateContact()">Update </a>
-        <a href="#" class="button" onclick="deleteContact()">Delete </a>
+        <h1>Friends or Family Management</h1>
+        <button class="button" onclick="showByPhoneNumber()">Show by Phone Number</button>
+        <button class="button" onclick="showById()">Show by ID</button>
+        <button class="button" onclick="showCreateForm()">Add</button>
+        <button class="button" onclick="showUpdateForm()">Update</button>
+        <button class="button" onclick="showDeleteForm()">Delete</button>
 
-        <!-- Filter section for showing or managing contact details -->
         <div id="filter-section" class="filter-container" style="display: none;">
-            <label id="cNumber" for="contactNumber" style="display: none;">Contact Number:</label>
-            <input type="text" id="contactNumber" placeholder="Enter Contact Number">
+            <label id="contactNumberLabel" for="contactNumber">Contact Number:</label>
+            <input type="text" id="contactNumber" placeholder="Enter Contact Number" >
+            <label id="cidLabel" for="cid">Customer ID:</label>
+            <input type="text" id="cid" placeholder="Enter Customer ID">
+            <button class="button" onclick="fetchContacts()">Search</button>
+        </div>
 
-            <label id="cId" for="contactId" style="display: none;">Customer ID:</label>
-            <input type="text" id="contactId" placeholder="Enter Contact ID">
+        <div id="form-container" class="form-container" style="display: none;">
+            <form id="contactForm">
+                <input type="hidden" id="formType">
 
-            <label id="cName" for="contactName" style="display: none;">Name:</label>
-            <input type="text" id="contactName" placeholder="Enter Contact Name">
+                <div id="create-update-fields" style="display: none;">
 
-            <label id="cRelationship" for="relationship" style="display: none;">Relationship:</label>
-            <input type="text" id="relationship" placeholder="Enter Relationship">
+                    <label for="customerId" id="cusIdLabel">Customer Id:</label>
+                    <input type="text" id="customerId">
 
-            <button class="button" id="getbyid" onclick="performAction()" style="display: none;">Get by ID</button>
-            <button class="button" id="getbycontact" onclick="performAction()" style="display: none;">Get by Contact Number</button>
-            <button class="button" id="submit" onclick="performAction()" style="display: none;">Submit</button>
+                    <label for="contactNumberInput">Contact Number:</label>
+                    <input type="text" id="contactNumberInput">
+
+                    <label for="contactName">Contact Name:</label>
+                    <input type="text" id="contactName">
+
+                    <label for="relationshipType">Relationship Type:</label>
+                    <input type="text" id="relationshipType">
+                </div>
+
+                <div id="delete-field" style="display: none;">
+                    <label for="deleteContactNumber">Contact Number:</label>
+                    <input type="text" id="deleteContactNumber">
+                </div>
+
+                <button type="submit" class="button">Submit</button>
+            </form>
         </div>
 
         <div id="table-container" class="table-container" style="display: none;">
             <table>
                 <thead>
                     <tr>
-                        <th>Customer ID</th>
                         <th>Contact Number</th>
                         <th>Contact Name</th>
                         <th>Relationship Type</th>
@@ -52,7 +85,6 @@
                     <!-- Contact rows will be dynamically inserted here -->
                 </tbody>
             </table>
-            
         </div>
     </div>
 

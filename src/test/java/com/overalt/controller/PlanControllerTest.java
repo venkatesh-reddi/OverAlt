@@ -1,24 +1,30 @@
 package com.overalt.controller;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,10 +46,13 @@ public class PlanControllerTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    @BeforeEach
+    public void setUp() {
+        mockMvc = MockMvcBuilders.standaloneSetup(planController).build();
+    }
+
     @Test
     void testCreatePlan() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(planController).build();
-
         Plan plan = new Plan();
         plan.setPlanId(1);
         plan.setPlanName("Basic Plan");
@@ -56,7 +65,7 @@ public class PlanControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(plan)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.planId").value(1))
                 .andExpect(jsonPath("$.planName").value("Basic Plan"))
                 .andExpect(jsonPath("$.maxFamilyMembers").value(4))
                 .andExpect(jsonPath("$.maxFriends").value(10));
@@ -64,8 +73,6 @@ public class PlanControllerTest {
 
     @Test
     void testCreatePlan_Invalid() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(planController).build();
-
         mockMvc.perform(post("/plans")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{ \"planName\": \"\", \"maxFamilyMembers\": 4, \"maxFriends\": 10 }"))
@@ -79,8 +86,6 @@ public class PlanControllerTest {
 
     @Test
     void testGetPlanById() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(planController).build();
-
         Plan plan = new Plan();
         plan.setPlanId(1);
         plan.setPlanName("Basic Plan");
@@ -91,7 +96,7 @@ public class PlanControllerTest {
 
         mockMvc.perform(get("/plans/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.planId").value(1))
                 .andExpect(jsonPath("$.planName").value("Basic Plan"))
                 .andExpect(jsonPath("$.maxFamilyMembers").value(4))
                 .andExpect(jsonPath("$.maxFriends").value(10));
@@ -99,8 +104,6 @@ public class PlanControllerTest {
 
     @Test
     void testGetPlanById_NotFound() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(planController).build();
-
         when(planRepository.findById(anyInt())).thenReturn(Optional.empty());
 
         mockMvc.perform(get("/plans/1"))
@@ -114,8 +117,6 @@ public class PlanControllerTest {
 
     @Test
     void testGetAllPlans() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(planController).build();
-
         Plan plan1 = new Plan();
         plan1.setPlanId(1);
         plan1.setPlanName("Basic Plan");
@@ -135,16 +136,14 @@ public class PlanControllerTest {
         mockMvc.perform(get("/plans"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].planId").value(1))
                 .andExpect(jsonPath("$[0].planName").value("Basic Plan"))
-                .andExpect(jsonPath("$[1].id").value(2))
+                .andExpect(jsonPath("$[1].planId").value(2))
                 .andExpect(jsonPath("$[1].planName").value("Premium Plan"));
     }
 
     @Test
     void testUpdatePlan() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(planController).build();
-
         Plan existingPlan = new Plan();
         existingPlan.setPlanId(1);
         existingPlan.setPlanName("Basic Plan");
@@ -164,7 +163,7 @@ public class PlanControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updatedPlan)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.planId").value(1))
                 .andExpect(jsonPath("$.planName").value("Updated Plan"))
                 .andExpect(jsonPath("$.maxFamilyMembers").value(5))
                 .andExpect(jsonPath("$.maxFriends").value(15));
@@ -172,8 +171,6 @@ public class PlanControllerTest {
 
     @Test
     void testUpdatePlan_NotFound() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(planController).build();
-
         Plan updatedPlan = new Plan();
         updatedPlan.setPlanId(1);
         updatedPlan.setPlanName("Updated Plan");
@@ -195,8 +192,6 @@ public class PlanControllerTest {
 
     @Test
     void testDeletePlan() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(planController).build();
-
         doNothing().when(planRepository).deleteById(anyInt());
 
         mockMvc.perform(delete("/plans/1"))
@@ -205,8 +200,6 @@ public class PlanControllerTest {
 
     @Test
     void testDeletePlan_InternalServerError() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(planController).build();
-
         doThrow(new RuntimeException()).when(planRepository).deleteById(anyInt());
 
         mockMvc.perform(delete("/plans/1"))

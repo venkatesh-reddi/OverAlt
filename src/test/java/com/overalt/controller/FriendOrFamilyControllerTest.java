@@ -1,24 +1,31 @@
 package com.overalt.controller;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,10 +52,13 @@ public class FriendOrFamilyControllerTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    @BeforeEach
+    public void setUp() {
+        mockMvc = MockMvcBuilders.standaloneSetup(friendOrFamilyController).build();
+    }
+
     @Test
     void testCreateFriendOrFamily() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(friendOrFamilyController).build();
-
         FriendOrFamily friendOrFamily = new FriendOrFamily();
         friendOrFamily.setContactNumber(123456789L);
         friendOrFamily.setContactName("Alice");
@@ -67,8 +77,6 @@ public class FriendOrFamilyControllerTest {
 
     @Test
     void testCreateFriendOrFamily_Invalid() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(friendOrFamilyController).build();
-
         mockMvc.perform(post("/friendorfamily")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{ \"contactNumber\": -1 }")) // Invalid contact number
@@ -82,8 +90,6 @@ public class FriendOrFamilyControllerTest {
 
     @Test
     void testGetFriendOrFamilyByContactNumber() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(friendOrFamilyController).build();
-
         FriendOrFamily friendOrFamily = new FriendOrFamily();
         friendOrFamily.setContactNumber(123456789L);
         friendOrFamily.setContactName("Alice");
@@ -100,8 +106,6 @@ public class FriendOrFamilyControllerTest {
 
     @Test
     void testGetFriendOrFamilyByContactNumber_NotFound() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(friendOrFamilyController).build();
-
         when(friendOrFamilyRepository.findByContactNumber(anyLong())).thenReturn(null);
 
         mockMvc.perform(get("/friendorfamily/123456789"))
@@ -115,8 +119,6 @@ public class FriendOrFamilyControllerTest {
 
     @Test
     void testGetFriendsOrFamilyByCustomerId() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(friendOrFamilyController).build();
-
         Customer customer = new Customer();
         customer.setCustomerId(1);
         customer.setFirstName("John");
@@ -140,8 +142,6 @@ public class FriendOrFamilyControllerTest {
 
     @Test
     void testGetFriendsOrFamilyByCustomerId_NotFound() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(friendOrFamilyController).build();
-
         when(customerRepository.findById(anyInt())).thenReturn(Optional.empty());
 
         mockMvc.perform(get("/friendorfamily/customer/1"))
@@ -150,14 +150,13 @@ public class FriendOrFamilyControllerTest {
 
     @Test
     void testUpdateFriendOrFamily() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(friendOrFamilyController).build();
-
         FriendOrFamily existingFriendOrFamily = new FriendOrFamily();
         existingFriendOrFamily.setContactNumber(123456789L);
         existingFriendOrFamily.setContactName("Alice");
         existingFriendOrFamily.setRelationshipType("Friend");
 
         FriendOrFamily updatedFriendOrFamily = new FriendOrFamily();
+        updatedFriendOrFamily.setContactNumber(123456789L); // Ensure ID is set for update
         updatedFriendOrFamily.setContactName("Bob");
         updatedFriendOrFamily.setRelationshipType("Family");
 
@@ -175,8 +174,6 @@ public class FriendOrFamilyControllerTest {
 
     @Test
     void testUpdateFriendOrFamily_NotFound() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(friendOrFamilyController).build();
-
         FriendOrFamily updatedFriendOrFamily = new FriendOrFamily();
         updatedFriendOrFamily.setContactName("Bob");
         updatedFriendOrFamily.setRelationshipType("Family");
@@ -196,8 +193,6 @@ public class FriendOrFamilyControllerTest {
 
     @Test
     void testDeleteFriendOrFamily() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(friendOrFamilyController).build();
-
         doNothing().when(friendOrFamilyRepository).deleteById(anyLong());
 
         mockMvc.perform(delete("/friendorfamily/123456789"))
@@ -206,8 +201,6 @@ public class FriendOrFamilyControllerTest {
 
     @Test
     void testDeleteFriendOrFamily_InternalServerError() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(friendOrFamilyController).build();
-
         doThrow(new RuntimeException()).when(friendOrFamilyRepository).deleteById(anyLong());
 
         mockMvc.perform(delete("/friendorfamily/123456789"))
