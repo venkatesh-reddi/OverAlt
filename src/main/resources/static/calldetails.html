@@ -6,7 +6,32 @@
     <title>Call Details</title>
     <link rel="stylesheet" href="./css/styles.css">
 
-    
+    <style>
+        header{
+            background-color: brown;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            
+        }
+        .button{
+        background-color: brown;
+        margin: 20px;
+        font-size: large;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+        }
+        body{
+            background-color: rgb(236, 219, 198);
+            font-size: large;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            color: brown;
+            font-weight: 160;
+        }
+        
+        table , tr , td ,th  {
+            border: solid 3px black;
+        }
+        
+    </style>
 </head>
 <body onload="loadHeader()">
 
@@ -19,6 +44,10 @@
         <a href="#" class="button" onclick="showByCallId()">Show by Call ID</a>
         <a href="#" class="button" onclick="showByCallerId()">Show by Caller ID</a>
         <a href="#" class="button" onclick="showByReceiverId()">Show by Receiver ID</a>
+
+        <div class="info">
+            Get all Calldetails by Call Id , Caller Id or Reciever Id. 
+        </div>
 
         <!-- Filter section for showing call details -->
         <div id="filter-section" class="filter-container" style="display: none;">
