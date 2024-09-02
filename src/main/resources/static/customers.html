@@ -21,6 +21,36 @@
         .form-container button {
             padding: 10px;
         }
+
+        header{
+            background-color: rgb(25, 137, 150);
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            
+        }
+        .button{
+        background-color:rgb(25, 137, 150);
+        margin: 20px;
+        font-size: large;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        border: 2px solid rgb(19, 106, 118);
+        }
+
+        .button:hover {
+            background-color: rgb(66, 179, 210);
+        }
+        body{
+            background-color: rgb(243, 246, 222);
+            font-size: large;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            color: rgb(25, 137, 150);
+            font-weight: 160;
+            
+        }
+        
+        table , tr , td ,th  {
+            border: solid 3px rgba(14, 3, 78, 0.758);
+        }
+        
     </style>
 </head>
 <body onload="loadHeader()">
@@ -40,6 +70,9 @@
             <label id="customerIdLabel" for="customerId">Customer ID:</label>
             <input type="text" id="customerId" placeholder="Enter Customer ID">
             <button class="button" onclick="fetchCustomers()">Search</button>
+        </div>
+        <div>
+            Perform all CRUD operations for Customers 
         </div>
 
         <div id="form-container" class="form-container" style="display: none;">
