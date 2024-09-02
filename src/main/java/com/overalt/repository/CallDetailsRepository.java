@@ -15,15 +15,10 @@ public interface CallDetailsRepository extends JpaRepository<CallDetails, Intege
     List<CallDetails> findByCallerIdAndReceiverId(Long callerId, Long receiverId);
     List<CallDetails> findByCallStartTimeBetween(LocalDateTime startTime, LocalDateTime endTime);
 
-    static void deleteByCallerId(Long callerId) {
-        // TODO Auto-generated method stub
+    static void deleteByCallerId(Long callerId) { 
         throw new UnsupportedOperationException("Unimplemented method 'deleteByCallerId'");
     }
     void deleteByReceiverId(Long receiverId);
     void deleteByCallerId(long anyLong);
     void deleteByCallId(long anyLong);
-
-   
-
-    
 }
