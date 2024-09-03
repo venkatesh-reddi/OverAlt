@@ -6,20 +6,63 @@
     <title>Telecommunication Management System</title>
     <link rel="stylesheet" href="./css/styles.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
 </head>
-<body onload="loadHeader()">
+<body onload="loadHeader(); loadFooter();">
 
     <header id="header"></header>
 
     <main>
-        <!-- Content goes here -->
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Welcome to OverAlt</h1>
+                <p>The OverAlt project is a comprehensive Java-based Spring Boot application designed to manage telecommunication services. It facilitates the management of customers, their selected plans, friends and family lists, and call details. The application ensures that customers can only add a specified number of family members and friends based on their chosen plan and allows calls only to those contacts. The application uses PostgreSQL as its database and provides RESTful APIs for various operations.</p>
+            </div>
+        </section>
+
+        <!-- Technologies Section -->
+        <section class="technologies">
+            <h2>Technologies Used</h2>
+            <div class="tech-slider">
+                <div class="tech-card"><h3>Technology 1 </h3><p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. </p></div>
+                <div class="tech-card"><h3>Technology 2 </h3><p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. </p></div>
+                <div class="tech-card"><h3>Technology 3 </h3><p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. </p></div>
+                <div class="tech-card"><h3>Technology 4 </h3><p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. </p></div>
+                <div class="tech-card"><h3>Technology 5 </h3><p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. </p></div>
+            </div>
+        </section>
+
+        <section class="contributors">
+            <h2>Our Contributors</h2>
+            <div class="contributor-slider">
+                <div class="contributor-card">
+                    <img src="./images/woman4.png" alt="Contributor 1">
+                    <h3>Shreya K G</h3>
+                </div>
+                <div class="contributor-card">
+                    <img src="./images/man1.png" alt="Contributor 2">
+                    <h3>Venkatesh Reddi</h3>
+                </div>
+                <div class="contributor-card">
+                    <img src="./images/woman1.png" alt="Contributor 3">
+                    <h3>Mani Harikha</h3>
+                </div>
+                <div class="contributor-card">
+                    <img src="./images/woman2.png" alt="Contributor 4">
+                    <h3>Sakina</h3>
+                </div>
+                <div class="contributor-card">
+                    <img src="./images/woman3.png" alt="Contributor 5">
+                    <h3>Mounika</h3>
+                </div>
+            </div>
+        </section>
 
     </main>
 
-
+    <!-- Footer -->
+    <footer id="footer"></footer>
 
     <script src="./js/script.js"></script>
-
 </body>
 </html>
