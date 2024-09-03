@@ -384,7 +384,7 @@ The following images illustrate the UI for various endpoints:
 ![Delete Plan By ID](images/plan/deletePlanById.jpeg)
 
 #### Get All Plans
-![Get All Plans](images/plan/getAllPlans.jpeg)
+![Get All Plans](images/plan/getAllPLans.jpeg)
 
 #### Get Plan By ID
 ![Get Plan By ID](images/plan/getPlanById.jpeg)
