@@ -101,6 +101,7 @@ nav ul li a:hover {
     display: flex;
     overflow-x: auto;
     padding: 10px 80px;
+    margin-left: 110px;
 }
 
 .tech-card {
