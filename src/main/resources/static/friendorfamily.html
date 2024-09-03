@@ -21,6 +21,35 @@
         .form-container button {
             padding: 10px;
         }
+        header{
+            background-color: rgb(238, 118, 234);
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            
+        }
+        .button{
+        background-color: rgb(238, 118, 234);
+        margin: 20px;
+        font-size: large;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        border: 2px solid rgb(207, 15, 224);
+        }
+
+        .button:hover {
+            background-color: rgb(214, 122, 232);
+        }
+        body{
+            background-color: rgb(238, 243, 195);
+            font-size: large;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            color: rgb(203, 21, 197);
+            font-weight: 160;
+            
+        }
+        
+        table , tr , td ,th  {
+            border: solid 3px rgb(207, 15, 224);
+        }
+        
     </style>
 </head>
 <body onload="loadHeader()">
@@ -42,6 +71,9 @@
             <label id="cidLabel" for="cid">Customer ID:</label>
             <input type="text" id="cid" placeholder="Enter Customer ID">
             <button class="button" onclick="fetchContacts()">Search</button>
+        </div>
+        <div>
+            Perform all CRUD operations for the Friends or Family table.
         </div>
 
         <div id="form-container" class="form-container" style="display: none;">
