@@ -5,8 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Call Details</title>
     <link rel="stylesheet" href="./css/styles.css">
+    <title>Tailwind CSS Example</title>
+ 
+    <style>
+        header{
+            background-color: brown;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            
+        }
+        .button{
+        background-color: brown;
+        margin: 20px;
+        font-size: large;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        border: 2px solid rgb(101, 19, 19);
+        }
 
-    
+        .button:hover {
+            background-color: rgb(210, 111, 111);
+        }
+        body{
+            background-color: rgb(236, 219, 198);
+            font-size: large;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            color: brown;
+            font-weight: 160;
+            
+        }
+        
+        table , tr , td ,th  {
+            border: solid 3px rgba(71, 7, 7, 0.758);
+        }
+        
+    </style>
 </head>
 <body onload="loadHeader()">
 
@@ -19,6 +50,10 @@
         <a href="#" class="button" onclick="showByCallId()">Show by Call ID</a>
         <a href="#" class="button" onclick="showByCallerId()">Show by Caller ID</a>
         <a href="#" class="button" onclick="showByReceiverId()">Show by Receiver ID</a>
+
+        <div>
+            Get all Calldetails by Call Id , Caller Id or Reciever Id. 
+        </div>
 
         <!-- Filter section for showing call details -->
         <div id="filter-section" class="filter-container" style="display: none;">
