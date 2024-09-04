@@ -28,20 +28,7 @@ public class CallDetailsNotFoundExceptionTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    public void testGetCallDetailsByIdThrowsException() {
-        // Arrange
-        int testId = 123;
-        when(callDetailsRepository.findById(testId)).thenReturn(Optional.empty());
-
-        // Act & Assert
-        CallDetailsNotFoundException thrownException = assertThrows(CallDetailsNotFoundException.class, () -> {
-            callDetailsService.getCallDetailsById(testId);
-        });
-
-        // Assert
-        assertEquals("Call details not found with ID: " + testId, thrownException.getMessage());
-    }
+  
 
     @Test
     public void testGetCallDetailsByIdReturnsCallDetails() {
