@@ -1,5 +1,12 @@
 # OverAlt
 
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://shields.io)
+[![Java](https://img.shields.io/badge/java-17-brightgreen.svg)](https://www.oracle.com/java/technologies/javase-jdk17-downloads.html)
+[![Spring Boot](https://img.shields.io/badge/spring--boot-2.7.3-brightgreen)](https://spring.io/projects/spring-boot)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-12+-blue.svg)](https://www.postgresql.org/download/)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+
+
 ## Overview
 
 The OverAlt project is a comprehensive Java-based Spring Boot application designed to manage telecommunication services. It facilitates the management of customers, their selected plans, friends and family lists, and call details. The application ensures that customers can only add a specified number of family members and friends based on their chosen plan and allows calls only to those contacts. The application uses PostgreSQL as its database and provides RESTful APIs for various operations.
@@ -11,11 +18,15 @@ The OverAlt project is a comprehensive Java-based Spring Boot application design
 - [Prerequisites](#prerequisites)
 - [Setup Instructions](#setup-instructions)
 - [Database Structure](#database-structure)
-- [Java Classes and Methods](#java-classes-and-methods)
+- [Models](#models)
+- [Controllers](#controllers)
+- [Services](#services)
+- [Repositories](#repositories)
 - [Endpoints](#endpoints)
 - [Usage](#usage)
 - [Workflow](#workflow)
 - [Testing the APIs](#testing-the-apis)
+- [UI Images](#ui-images)
 - [Directory Structure](#directory-structure)
 - [Troubleshooting](#troubleshooting)
 - [Contributing](#contributing)
@@ -27,7 +38,6 @@ The OverAlt project is a comprehensive Java-based Spring Boot application design
 - **Plan Management**: Define different plans with specific limits on family members and friends.
 - **Friends and Family List**: Allow customers to add, retrieve, and delete friends and family members based on their plan.
 - **Call Management**: Track and log call details, ensuring calls are only allowed to authorized contacts.
-- **Data Generation**: Populate the database with random data for testing purposes.
 
 ## Technology Stack
 
@@ -175,238 +185,276 @@ The application uses the following database tables:
 - `call_end_time`
 - `call_duration`
 
-## Java Classes and Methods
+## Models
 
-### Customer Class
-The `Customer` class manages customer details and their interactions with the plan, friends, and family lists.
-
-#### Attributes:
-- `customerId`
-- `firstName`
-- `lastName`
-- `phoneNumber`
+### Customer Model
+Represents a customer entity with attributes such as:
+- `customer_id`
+- `first_name`
+- `last_name`
+- `phone_number`
 - `email`
 - `address`
-- `plan` (Object of type Plan)
-- `friendsAndFamily` (List of `FriendOrFamily` objects)
-- `currentFamilyCount`
-- `currentFriendsCount`
+- `plan` (relation to `Plan` entity)
+- `current_family_count`
+- `current_friends_count`
 
-#### Methods:
-- `addFamilyMember(FriendOrFamily familyMember)`: Adds a family member if within the plan's limit.
-- `addFriend(FriendOrFamily friend)`: Adds a friend if within the plan's limit.
-- `makeCall(String calledNumber)`: Makes a call if the called number is in the customer's friends and family list and allowed by the plan.
+### Plan Model
+Represents a telecommunication plan with attributes such as:
+- `plan_id`
+- `plan_name`
+- `monthly_cost`
+- `data_limit`
+- `call_minutes`
+- `max_family_members`
+- `max_friends`
 
-### Plan Class
-The `Plan` class defines the details of a telecommunication plan.
+### FriendOrFamily Model
+Represents a friend or family member in the customer’s list with attributes such as:
+- `contact_name`
+- `contact_number`
+- `relationship_type`
 
-#### Attributes:
-- `planId`
-- `planName`
-- `monthlyCost`
-- `dataLimit`
-- `callMinutes`
-- `maxFamilyMembers`
-- `maxFriends`
-
-#### Methods:
-- `changePlanDetails(String planName, double monthlyCost, int dataLimit, int callMinutes)`: Changes the details of the plan.
-- `setMaxFamilyMembers(int maxFamilyMembers)`: Sets the maximum number of family members allowed.
-- `setMaxFriends(int maxFriends)`: Sets the maximum number of friends allowed.
-
-### FriendOrFamily Class
-The `FriendOrFamily` class represents a contact in the customer's friends and family list.
-
-#### Attributes:
-- `contactName`
-- `contactNumber`
-- `relationshipType` (e.g., "Friend" or "Family")
-
-#### Methods:
-- `updateContactNumber(String newPhoneNumber)`: Updates the contact number.
-- `updateRelationshipType(String newRelationshipType)`: Updates the relationship type.
-
-### CallDetails Class
-The `CallDetails` class manages the details of calls made by the customer.
-
-#### Attributes:
-- `call_id` (Primary Key)
-- `caller_id` (Foreign Key referencing Customers table)
+### CallDetails Model
+Tracks the details of a call made by a customer with attributes such as:
+- `call_id`
+- `caller_id`
 - `receiver_id`
 - `call_start_time`
 - `call_end_time`
 - `call_duration`
 
-#### Methods:
-- `calculateCallDuration()`: Calculates the duration of the call.
-- `getCallDetails()`: Retrieves call details by `callId` or `caller_id`.
+## Controllers
 
-### DataGenerator Class
-The `DataGenerator` class provides utility methods to generate random data for testing.
+### CustomerController
+Manages endpoints related to customer operations:
+- `@GetMapping("/customers/{id}")`: Retrieve customer details by ID.
+- `@PostMapping("/customers")`: Create a new customer.
+- `@PutMapping("/customers/{id}")`: Update customer details.
+- `@DeleteMapping("/customers/{id}")`: Delete a customer by ID.
 
-#### Methods:
-- `generateRandomCustomer()`: Generates a random customer.
-- `generateRandomPlan()`: Generates a random plan.
-- `generateRandomFriendOrFamily(String relationshipType)`: Generates a random friend or family member.
-- `generateRandomCallDetails(Customer customer)`: Generates random call details for a customer.
+### PlanController
+Handles operations related to plans:
+- `@GetMapping("/plans/{id}")`: Retrieve plan details by ID.
+- `@PostMapping("/plans")`: Create a new plan.
+- `@PutMapping("/plans/{id}")`: Update plan details.
+- `@DeleteMapping("/plans/{id}")`: Delete a plan by ID.
+
+### FriendOrFamilyController
+Manages the friends and family list for customers:
+- `@GetMapping("/friends-or-family/{customerId}")`: Get the friends and family list for a customer.
+- `@PostMapping("/friends-or-family/{customerId}")`: Add a new friend or family member.
+- `@DeleteMapping("/friends-or-family/{customerId}/{contactId}")`: Remove a friend or family member.
+
+### CallDetailsController
+Tracks call details for customers:
+- `@GetMapping("/call-details/{id}")`: Retrieve call details by ID.
+- `@PostMapping("/call-details")`: Log a new call detail.
+- `@GetMapping("/call-details/caller/{callerId}")`: Retrieve call details by caller ID.
+
+## Services
+
+### CustomerService
+Provides business logic for managing customers:
+- `getCustomerById(Long id)`: Fetches a customer by their ID.
+- `createCustomer(Customer customer)`: Creates a new customer.
+- `updateCustomer(Long id, Customer customer)`: Updates customer details.
+- `deleteCustomer(Long id)`: Deletes a customer.
+
+### PlanService
+Handles logic related to plans:
+- `getPlanById(Long id)`: Fetches a plan by its ID.
+- `createPlan(Plan plan)`: Creates a new plan.
+- `updatePlan(Long id, Plan plan)`: Updates plan details.
+- `deletePlan(Long id)`: Deletes a plan.
+
+### FriendOrFamilyService
+Handles the business logic for managing a customer's friends and family list:
+- `getFriendsOrFamilyByCustomerId(Long customerId)`: Retrieves the friends and family list for a specific customer.
+- `addFriendOrFamily(Long customerId, FriendOrFamily friendOrFamily)`: Adds a new friend or family member to the customer's list.
+- `removeFriendOrFamily(Long customerId, Long contactId)`: Removes a friend or family member from the customer's list.
+
+### CallDetailsService
+Manages the business logic for tracking call details:
+- `getCallDetailsById(Long id)`: Fetches the call details by its ID.
+- `logCallDetails(CallDetails callDetails)`: Logs a new call in the system.
+- `getCallDetailsByCallerId(Long callerId)`: Retrieves all call details associated with a specific caller.
+
+## Repositories
+
+### CustomerRepository
+Extends `JpaRepository` to provide CRUD operations for the `Customer` entity. Custom queries can be added to fetch customer data based on various attributes like email, phone number, or plan ID.
+
+### PlanRepository
+Extends `JpaRepository` to manage CRUD operations for the `Plan` entity. This repository allows custom query methods to retrieve plan details by plan name or cost.
+
+### FriendOrFamilyRepository
+Extends `JpaRepository` for managing `FriendOrFamily` entity operations. It supports custom queries for retrieving a customer’s friends and family list by customer ID.
+
+### CallDetailsRepository
+Extends `JpaRepository` to manage `CallDetails` entity operations. Provides methods to fetch call logs based on caller ID, receiver ID, or call duration.
 
 ## Endpoints
 
-### CallDetails Endpoints
-1. **Create a new call detail**
-   - **Endpoint**: `POST /call-details`
-   - **Request Body**: `CallDetails` object
-   - **Response**: Created `CallDetails` object
-
-2. **Get a call detail by ID**
-   - **Endpoint**: `GET /call-details/{callId}`
-   - **Path Variable**: `callId`
-   - **Response**: `CallDetails` object
-
-3. **Get all call details**
-   - **Endpoint**: `GET /call-details`
-   - **Response**: List of `CallDetails` objects
-
-4. **Get call details by caller ID**
-   - **Endpoint**: `GET /call-details/caller/{callerId}`
-   - **Path Variable**: `callerId`
-   - **Response**: List of `CallDetails` objects
-
-5. **Get call details by receiver ID**
-   - **Endpoint**: `GET /call-details/receiver/{receiverId}`
-   - **Path Variable**: `receiverId`
-   - **Response**: List of `
-
-CallDetails` objects
+Here's a summary of the available API endpoints:
 
 ### Customer Endpoints
-1. **Create a new customer**
-   - **Endpoint**: `POST /customers`
-   - **Request Body**: `Customer` object
-   - **Response**: Created `Customer` object
-
-2. **Get a customer by ID**
-   - **Endpoint**: `GET /customers/{id}`
-   - **Path Variable**: `id`
-   - **Response**: `Customer` object
-
-3. **Get all customers**
-   - **Endpoint**: `GET /customers`
-   - **Response**: List of `Customer` objects
-
-4. **Update a customer**
-   - **Endpoint**: `PUT /customers/{id}`
-   - **Path Variable**: `id`
-   - **Request Body**: `Customer` object
-   - **Response**: Updated `Customer` object
-
-5. **Delete a customer**
-   - **Endpoint**: `DELETE /customers/{id}`
-   - **Path Variable**: `id`
-   - **Response**: Status message
+- **GET /customers/{id}**: Retrieve customer details by ID.
+- **POST /customers**: Create a new customer.
+- **PUT /customers/{id}**: Update customer details.
+- **DELETE /customers/{id}**: Delete a customer by ID.
 
 ### Plan Endpoints
-1. **Create a new plan**
-   - **Endpoint**: `POST /plans`
-   - **Request Body**: `Plan` object
-   - **Response**: Created `Plan` object
+- **GET /plans/{id}**: Retrieve plan details by ID.
+- **POST /plans**: Create a new plan.
+- **PUT /plans/{id}**: Update plan details.
+- **DELETE /plans/{id}**: Delete a plan by ID.
 
-2. **Get a plan by ID**
-   - **Endpoint**: `GET /plans/{id}`
-   - **Path Variable**: `id`
-   - **Response**: `Plan` object
+### Friends and Family Endpoints
+- **GET /friends-or-family/{customerId}**: Get the friends and family list for a customer.
+- **POST /friends-or-family/{customerId}**: Add a new friend or family member.
+- **DELETE /friends-or-family/{customerId}/{contactId}**: Remove a friend or family member.
 
-3. **Get all plans**
-   - **Endpoint**: `GET /plans`
-   - **Response**: List of `Plan` objects
-
-4. **Update a plan**
-   - **Endpoint**: `PUT /plans/{id}`
-   - **Path Variable**: `id`
-   - **Request Body**: `Plan` object
-   - **Response**: Updated `Plan` object
-
-5. **Delete a plan**
-   - **Endpoint**: `DELETE /plans/{id}`
-   - **Path Variable**: `id`
-   - **Response**: Status message
-
-### FriendsAndFamily Endpoints
-1. **Add a friend or family member**
-   - **Endpoint**: `POST /friends-family`
-   - **Request Body**: `FriendOrFamily` object
-   - **Response**: Created `FriendOrFamily` object
-
-2. **Get all friends and family for a customer**
-   - **Endpoint**: `GET /friends-family/{customerId}`
-   - **Path Variable**: `customerId`
-   - **Response**: List of `FriendOrFamily` objects
-
-3. **Delete a friend or family member**
-   - **Endpoint**: `DELETE /friends-family/{customerId}/{contactNumber}`
-   - **Path Variables**: `customerId`, `contactNumber`
-   - **Response**: Status message
+### Call Details Endpoints
+- **GET /call-details/{id}**: Retrieve call details by ID.
+- **POST /call-details**: Log a new call detail.
+- **GET /call-details/caller/{callerId}**: Retrieve call details by caller ID.
 
 ## Usage
 
-1. **Setup**: Configure your database and ensure the tables are set up according to the provided structure.
-2. **Data Population**: Use the `DataGenerator` class to populate the database with random customers, plans, friends, and family members.
-3. **Operations**: Use the `Customer` class methods to add friends, family members, and make calls according to the rules of the selected plan.
-4. **Call Logging**: The application will automatically log call details and enforce plan rules.
+To interact with the OverAlt application, you can use tools like Postman or cURL to make HTTP requests to the available endpoints. The above endpoints allow for managing customers, plans, friends and family, and call details.
 
 ## Workflow
 
-1. **Customer Creation**: Generate or manually create customers and assign them plans.
-2. **Adding Contacts**: Use the `addFamilyMember()` and `addFriend()` methods in the `Customer` class to add contacts.
-3. **Making Calls**: Use the `makeCall()` method to initiate calls, which will be allowed or blocked based on the plan and contact list.
-4. **Logging Calls**: Call details are logged automatically, ensuring compliance with the plan’s rules.
+1. **Create a Plan**: Start by defining the available plans in the system.
+2. **Register a Customer**: Register customers and assign them a plan.
+3. **Manage Friends and Family**: Add friends and family members based on the plan restrictions.
+4. **Track Calls**: Log and retrieve call details.
 
 ## Testing the APIs
 
-Use tools like Postman or cURL to test the endpoints described above.
+### Using Postman
 
-### Example cURL Command:
+1. **Import the API Collection**: Import the OverAlt API collection to test the endpoints.
+2. **Configure Environment**: Set up the base URL of your running application in Postman.
+3. **Make Requests**: Send HTTP requests to the various endpoints to perform operations like creating a customer, adding friends, and logging call details.
+
+### Using cURL
+
+For example, to create a customer:
 
 ```bash
-curl -X POST http://localhost:8080/customers -H "Content-Type: application/json" -d '{"firstName":"John","lastName":"Doe","phoneNumber":"1234567890","email":"johndoe@example.com","address":"123 Main St","planId":1}'
+curl -X POST "http://localhost:8080/customers" \
+-H "Content-Type: application/json" \
+-d '{
+  "firstName": "John",
+  "lastName": "Doe",
+  "phoneNumber": "1234567890",
+  "email": "john.doe@example.com",
+  "address": "123 Elm Street",
+  "planId": 1
+}'
 ```
+
+## UI Images
+
+The following images illustrate the UI for various endpoints:
+
+### Home Page
+
+![Home](images/home.jpeg)
+
+### Customer Management UI
+
+#### Create Customer
+![Create Customer](images/customer/createCustomer.jpeg)
+
+#### Get All Customers
+![Get All Customers](images/customer/getAllCustomers.jpeg)
+
+#### Get Customer By ID
+![Get Customer By ID](images/customer/getCustomerById.jpeg)
+
+### Plan Management UI
+
+#### Create Plan
+![Create Plan](images/plan/createPlan.jpeg)
+
+#### Delete Plan By ID
+![Delete Plan By ID](images/plan/deletePlanById.jpeg)
+
+#### Get All Plans
+![Get All Plans](images/plan/getAllPLans.jpeg)
+
+#### Get Plan By ID
+![Get Plan By ID](images/plan/getPlanById.jpeg)
+
+### Friends and Family Management UI
+
+#### Create Friend or Family
+![Create Friend or Family](images/friendFamily/createFriendOrFamily.jpeg)
+
+#### Get Friend or Family By ID
+![Get Friend or Family By ID](images/friendFamily/getFriendOrFamilyById.jpeg)
+
+### Call Details Management UI
+
+#### Find All Call Details
+![Find All Call Details](images/callDetails/findAllCallDetails.jpeg)
+
+#### Get Call Detail By ID
+![Get Call Detail By ID](images/callDetails/getCallDetailById.jpeg)
+
+#### Get Call Details By Caller ID
+![Get Call Details By Caller ID](images/callDetails/getCallDetailsByCallerId.jpeg)
+
+#### Get Call Details By Receiver ID
+![Get Call Details By Receiver ID](images/callDetails/getCallDetailsByReceiverId.jpeg)
 
 ## Directory Structure
 
-```plaintext
-overalt/
-│
-├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   ├── com/
-│   │   │   │   ├── overalt/
-│   │   │   │   │   ├── controller/
-│   │   │   │   │   ├── model/
-│   │   │   │   │   ├── repository/
-│   │   │   │   │   ├── service/
-│   │   │   │   │   ├── OverAltApplication.java
-│   │   │   │   │   └── config/
-│   │   └── resources/
-│   │       ├── application.properties
-│   │       └── static/
-│   └── test/
-│       ├── java/
-│       └── resources/
-│
-└── README.md
+The project follows a standard Spring Boot directory structure:
+
+```
+src
+├── main
+│   ├── java
+│   │   └── com
+│   │       └── overalt
+│   │           ├── controller
+│   │           ├── model
+│   │           ├── repository
+│   │           ├── service
+│   │           └── OverAltApplication.java
+│   └── resources
+│       └── static
+│           ├── css
+│           ├── images
+│           ├── js
+│           ├── calldetails.html
+│           ├── customers.html
+│           ├── friendorfamily.html
+│           ├── header.html
+│           ├── index.html
+│           └── plans.html
+└── test
+    └── java
+        └── com
+            └── overalt
+                ├── controller
+                ├── service
+                └── OverAltApplicationTests.java
 ```
 
 ## Troubleshooting
 
-- **Database Connection Issues**: Ensure PostgreSQL is running, and the credentials in `application.properties` are correct.
-- **Dependency Issues**: Ensure all necessary dependencies are correctly added to `pom.xml` or `build.gradle`.
-- **API Errors**: Use Postman or cURL to debug API requests and verify the correctness of your payloads.
+- **Database Connection Issues**: Ensure that PostgreSQL is running and the connection details in `application.properties` are correct.
+- **Dependency Conflicts**: Run `mvn dependency:tree` or `./gradlew dependencies` to check for conflicts.
 
 ## Contributing
 
-Contributions are welcome! Please fork the repository and create a pull request with your changes. Ensure that your code is well-documented and follows the project's coding standards.
+Contributions are welcome! Please submit a pull request or open an issue to discuss your ideas.
 
 ## License
 
-This project is licensed under the Apache License Version 2.0 - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
