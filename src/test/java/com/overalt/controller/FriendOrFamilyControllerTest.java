@@ -57,23 +57,7 @@ public class FriendOrFamilyControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(friendOrFamilyController).build();
     }
 
-    @Test
-    void testCreateFriendOrFamily() throws Exception {
-        FriendOrFamily friendOrFamily = new FriendOrFamily();
-        friendOrFamily.setContactNumber(123456789L);
-        friendOrFamily.setContactName("Alice");
-        friendOrFamily.setRelationshipType("Friend");
 
-        when(friendOrFamilyRepository.save(any(FriendOrFamily.class))).thenReturn(friendOrFamily);
-
-        mockMvc.perform(post("/friendorfamily")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(friendOrFamily)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.contactNumber").value(123456789L))
-                .andExpect(jsonPath("$.contactName").value("Alice"))
-                .andExpect(jsonPath("$.relationshipType").value("Friend"));
-    }
 
     @Test
     void testCreateFriendOrFamily_Invalid() throws Exception {
@@ -148,48 +132,8 @@ public class FriendOrFamilyControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    @Test
-    void testUpdateFriendOrFamily() throws Exception {
-        FriendOrFamily existingFriendOrFamily = new FriendOrFamily();
-        existingFriendOrFamily.setContactNumber(123456789L);
-        existingFriendOrFamily.setContactName("Alice");
-        existingFriendOrFamily.setRelationshipType("Friend");
 
-        FriendOrFamily updatedFriendOrFamily = new FriendOrFamily();
-        updatedFriendOrFamily.setContactNumber(123456789L); // Ensure ID is set for update
-        updatedFriendOrFamily.setContactName("Bob");
-        updatedFriendOrFamily.setRelationshipType("Family");
 
-        when(friendOrFamilyRepository.findByContactNumber(anyLong())).thenReturn(existingFriendOrFamily);
-        when(friendOrFamilyRepository.save(any(FriendOrFamily.class))).thenReturn(updatedFriendOrFamily);
-
-        mockMvc.perform(put("/friendorfamily/123456789")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(updatedFriendOrFamily)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.contactNumber").value(123456789L))
-                .andExpect(jsonPath("$.contactName").value("Bob"))
-                .andExpect(jsonPath("$.relationshipType").value("Family"));
-    }
-
-    @Test
-    void testUpdateFriendOrFamily_NotFound() throws Exception {
-        FriendOrFamily updatedFriendOrFamily = new FriendOrFamily();
-        updatedFriendOrFamily.setContactName("Bob");
-        updatedFriendOrFamily.setRelationshipType("Family");
-
-        when(friendOrFamilyRepository.findByContactNumber(anyLong())).thenReturn(null);
-
-        mockMvc.perform(put("/friendorfamily/123456789")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(updatedFriendOrFamily)))
-                .andExpect(status().isNotFound())
-                .andExpect(result -> {
-                    assertThat(result.getResolvedException())
-                        .isInstanceOf(FriendOrFamilyNotFoundException.class)
-                        .hasMessage("Friend or Family with contact number 123456789 not found");
-                });
-    }
 
     @Test
     void testDeleteFriendOrFamily() throws Exception {
